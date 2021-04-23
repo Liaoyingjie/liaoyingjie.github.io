@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>廖英杰&amp;博客</title>
+  <title>Liaoyingjie&#39;s blogs</title>
   
-  <subtitle>网络工程师→Netdevops</subtitle>
+  <subtitle>网络工程师</subtitle>
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
