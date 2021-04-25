@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-04-25T03:04:38.568Z</updated>
+  <updated>2021-04-23T13:06:52.546Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,73 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>salt入门到实战1-初始安装</title>
-    <link href="http://example.com/2021/04/25/salt%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%981-%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85/"/>
-    <id>http://example.com/2021/04/25/salt%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%981-%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85/</id>
-    <published>2021-04-25T03:04:38.000Z</published>
-    <updated>2021-04-25T03:04:38.568Z</updated>
-    
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>linux压缩和解压缩</title>
-    <link href="http://example.com/2021/04/23/linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/"/>
-    <id>http://example.com/2021/04/23/linux%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/</id>
-    <published>2021-04-23T07:58:03.394Z</published>
-    <updated>2021-04-25T03:10:05.589Z</updated>
-    
-    <content type="html"><![CDATA[<ul><li>压缩文件&amp;远程传输<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#压缩文佳</span></span><br><span class="line">tar <span class="literal">-zcvf</span> dest.tar.gz dest/</span><br><span class="line"><span class="comment">#解压到指定目录</span></span><br><span class="line">tar <span class="literal">-zxvf</span> dest.tar.gz <span class="literal">-C</span> /tmp/dest/ </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">yum install nc</span><br><span class="line"><span class="comment">#接收端</span></span><br><span class="line">nc <span class="literal">-l</span> <span class="number">40000</span> | tar <span class="literal">-zxvf</span> -</span><br><span class="line"><span class="comment">#发送端</span></span><br><span class="line">tar <span class="literal">-zcvf</span> - sjpt22.dmp | nc <span class="number">10.1</span>.<span class="number">22.121</span> <span class="number">40000</span></span><br></pre></td></tr></table></figure></li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;ul&gt;
-&lt;li&gt;压缩文件&amp;amp;远程传输&lt;figure class=&quot;highlight powershell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;li</summary>
-      
-    
-    
-    
-    <category term="linux基础" scheme="http://example.com/categories/linux%E5%9F%BA%E7%A1%80/"/>
-    
-    
-    <category term="nc" scheme="http://example.com/tags/nc/"/>
-    
-    <category term="压缩" scheme="http://example.com/tags/%E5%8E%8B%E7%BC%A9/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>linux使用-文字编辑</title>
-    <link href="http://example.com/2021/04/23/linux%E4%BD%BF%E7%94%A8-%E6%96%87%E5%AD%97%E7%BC%96%E8%BE%91/"/>
-    <id>http://example.com/2021/04/23/linux%E4%BD%BF%E7%94%A8-%E6%96%87%E5%AD%97%E7%BC%96%E8%BE%91/</id>
-    <published>2021-04-23T07:39:58.280Z</published>
-    <updated>2021-04-25T03:10:17.082Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="vim操作"><a href="#vim操作" class="headerlink" title="vim操作"></a>vim操作</h1><p>linux命令行执行命令时，快速移动光标可节省不少时间，如下是快速移动光标的快捷键：</p><p>1、光标快速切换到行尾行首</p><pre><code> ctrl+a 行首 ctrl+e 行尾</code></pre><p>2、删除至行尾</p><pre><code>  ctrl+k</code></pre><p>3、删除命令行的命令</p><pre><code> *命令行显示的命令是最后一个命令时，直接下箭头即可 *命令行显示的命令是中间的命令时,只需两步：   ctrl+a行首；ctrl+k 删除光标所在处的字符</code></pre><p>4、左|右移动一个单词、字母</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Esc b 左移一个单词[back]</span><br><span class="line">Esc f 右移一个单词[forward]</span><br><span class="line">ctrl b 左移一个字母</span><br><span class="line">ctrl f 右移一个字母</span><br></pre></td></tr></table></figure><h1 id="nano操作"><a href="#nano操作" class="headerlink" title="nano操作"></a>nano操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ctrl +k   剪切</span><br><span class="line">ctrl +u   复制</span><br></pre></td></tr></table></figure><!--  -->]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;vim操作&quot;&gt;&lt;a href=&quot;#vim操作&quot; class=&quot;headerlink&quot; title=&quot;vim操作&quot;&gt;&lt;/a&gt;vim操作&lt;/h1&gt;&lt;p&gt;linux命令行执行命令时，快速移动光标可节省不少时间，如下是快速移动光标的快捷键：&lt;/p&gt;
-&lt;p&gt;1、光标快速切换</summary>
-      
-    
-    
-    
-    <category term="linux基础" scheme="http://example.com/categories/linux%E5%9F%BA%E7%A1%80/"/>
-    
-    
-    <category term="nano" scheme="http://example.com/tags/nano/"/>
-    
-    <category term="vim" scheme="http://example.com/tags/vim/"/>
-    
-  </entry>
   
   <entry>
     <title>Hello World</title>
