@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-04-25T05:56:23.909Z</updated>
+  <updated>2021-04-25T06:20:36.312Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -21,11 +21,17 @@
     <link href="http://example.com/2021/04/25/%E3%80%90salt%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98%E3%80%911-%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85/"/>
     <id>http://example.com/2021/04/25/%E3%80%90salt%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98%E3%80%911-%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85/</id>
     <published>2021-04-25T03:04:38.000Z</published>
-    <updated>2021-04-25T05:56:23.909Z</updated>
+    <updated>2021-04-25T06:20:36.312Z</updated>
     
     
     
     
+    <category term="【salt入门到实战】" scheme="http://example.com/categories/%E3%80%90salt%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98%E3%80%91/"/>
+    
+    
+    <category term="安装" scheme="http://example.com/tags/%E5%AE%89%E8%A3%85/"/>
+    
+    <category term="salt" scheme="http://example.com/tags/salt/"/>
     
   </entry>
   
@@ -34,7 +40,7 @@
     <link href="http://example.com/2021/04/23/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91-%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/"/>
     <id>http://example.com/2021/04/23/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91-%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/</id>
     <published>2021-04-23T07:58:03.394Z</published>
-    <updated>2021-04-25T05:55:57.514Z</updated>
+    <updated>2021-04-25T06:20:37.956Z</updated>
     
     <content type="html"><![CDATA[<ul><li>压缩文件&amp;远程传输<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#压缩文佳</span></span><br><span class="line">tar <span class="literal">-zcvf</span> dest.tar.gz dest/</span><br><span class="line"><span class="comment">#解压到指定目录</span></span><br><span class="line">tar <span class="literal">-zxvf</span> dest.tar.gz <span class="literal">-C</span> /tmp/dest/ </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">yum install nc</span><br><span class="line"><span class="comment">#接收端</span></span><br><span class="line">nc <span class="literal">-l</span> <span class="number">40000</span> | tar <span class="literal">-zxvf</span> -</span><br><span class="line"><span class="comment">#发送端</span></span><br><span class="line">tar <span class="literal">-zcvf</span> - sjpt22.dmp | nc <span class="number">10.1</span>.<span class="number">22.121</span> <span class="number">40000</span></span><br></pre></td></tr></table></figure></li></ul>]]></content>
     
@@ -47,7 +53,7 @@
     
     
     
-    <category term="linux基础" scheme="http://example.com/categories/linux%E5%9F%BA%E7%A1%80/"/>
+    <category term="【Linux使用】" scheme="http://example.com/categories/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91/"/>
     
     
     <category term="nc" scheme="http://example.com/tags/nc/"/>
@@ -61,7 +67,7 @@
     <link href="http://example.com/2021/04/23/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91-%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91/"/>
     <id>http://example.com/2021/04/23/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91-%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91/</id>
     <published>2021-04-23T07:39:58.280Z</published>
-    <updated>2021-04-25T05:55:47.776Z</updated>
+    <updated>2021-04-25T06:20:37.323Z</updated>
     
     <content type="html"><![CDATA[<h1 id="vim操作"><a href="#vim操作" class="headerlink" title="vim操作"></a>vim操作</h1><p>linux命令行执行命令时，快速移动光标可节省不少时间，如下是快速移动光标的快捷键：</p><p>1、光标快速切换到行尾行首</p><pre><code> ctrl+a 行首 ctrl+e 行尾</code></pre><p>2、删除至行尾</p><pre><code>  ctrl+k</code></pre><p>3、删除命令行的命令</p><pre><code> *命令行显示的命令是最后一个命令时，直接下箭头即可 *命令行显示的命令是中间的命令时,只需两步：   ctrl+a行首；ctrl+k 删除光标所在处的字符</code></pre><p>4、左|右移动一个单词、字母</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Esc b 左移一个单词[back]</span><br><span class="line">Esc f 右移一个单词[forward]</span><br><span class="line">ctrl b 左移一个字母</span><br><span class="line">ctrl f 右移一个字母</span><br></pre></td></tr></table></figure><h1 id="nano操作"><a href="#nano操作" class="headerlink" title="nano操作"></a>nano操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ctrl +k   剪切</span><br><span class="line">ctrl +u   复制</span><br></pre></td></tr></table></figure><!--  -->]]></content>
     
@@ -74,7 +80,7 @@
     
     
     
-    <category term="linux基础" scheme="http://example.com/categories/linux%E5%9F%BA%E7%A1%80/"/>
+    <category term="【Linux使用】" scheme="http://example.com/categories/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91/"/>
     
     
     <category term="nano" scheme="http://example.com/tags/nano/"/>
@@ -88,15 +94,14 @@
     <link href="http://example.com/2021/04/23/%E3%80%90hexo%E3%80%91-%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%B1%87%E6%80%BB/"/>
     <id>http://example.com/2021/04/23/%E3%80%90hexo%E3%80%91-%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8%E6%B1%87%E6%80%BB/</id>
     <published>2021-04-23T05:51:30.153Z</published>
-    <updated>2021-04-25T06:18:11.922Z</updated>
+    <updated>2021-04-25T06:19:50.059Z</updated>
     
-    <content type="html"><![CDATA[<p>#官方:</p><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server  //hexo s</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate  //hexo g</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy    //hexo d</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p><h3 id="常用组合"><a href="#常用组合" class="headerlink" title="常用组合"></a>常用组合</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$hexo clean &amp; hexo s -P 5000</span><br><span class="line">$hexo d -g</span><br></pre></td></tr></table></figure><h2 id="hexo使用错误汇总"><a href="#hexo使用错误汇总" class="headerlink" title="hexo使用错误汇总"></a>hexo使用错误汇总</h2><h3 id="1-更换主题后，本地显示正常，github显示依然为原有主题："><a href="#1-更换主题后，本地显示正常，github显示依然为原有主题：" class="headerlink" title="1.更换主题后，本地显示正常，github显示依然为原有主题："></a>1.更换主题后，本地显示正常，github显示依然为原有主题：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">中途更换过主题，在public目录下生成的静态文件可能混乱了，我使用下面的步骤重新生成后解决了。</span><br><span class="line">先删除public目录</span><br><span class="line">npm install hexo</span><br><span class="line">npm install</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure><h3 id="2-文本字符"><a href="#2-文本字符" class="headerlink" title="2.文本字符"></a>2.文本字符</h3><p>文章标记劲量不适用英文字符如[]，建议使用中文【】。</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="官方"><a href="#官方" class="headerlink" title="官方:"></a>官方:</h1><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server  //hexo s</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate  //hexo g</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy    //hexo d</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p><h3 id="常用组合"><a href="#常用组合" class="headerlink" title="常用组合"></a>常用组合</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$hexo clean &amp; hexo s -P 5000</span><br><span class="line">$hexo d -g</span><br></pre></td></tr></table></figure><h2 id="hexo使用错误汇总"><a href="#hexo使用错误汇总" class="headerlink" title="hexo使用错误汇总"></a>hexo使用错误汇总</h2><h3 id="1-更换主题后，本地显示正常，github显示依然为原有主题："><a href="#1-更换主题后，本地显示正常，github显示依然为原有主题：" class="headerlink" title="1.更换主题后，本地显示正常，github显示依然为原有主题："></a>1.更换主题后，本地显示正常，github显示依然为原有主题：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">中途更换过主题，在public目录下生成的静态文件可能混乱了，我使用下面的步骤重新生成后解决了。</span><br><span class="line">先删除public目录</span><br><span class="line">npm install hexo</span><br><span class="line">npm install</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure><h3 id="2-文本字符"><a href="#2-文本字符" class="headerlink" title="2.文本字符"></a>2.文本字符</h3><p>文章标记劲量不适用英文字符如[]，建议使用中文【】。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;#官方:&lt;/p&gt;
-&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documenta</summary>
+    <summary type="html">&lt;h1 id=&quot;官方&quot;&gt;&lt;a href=&quot;#官方&quot; class=&quot;headerlink&quot; title=&quot;官方:&quot;&gt;&lt;/a&gt;官方:&lt;/h1&gt;&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very fi</summary>
       
     
     
