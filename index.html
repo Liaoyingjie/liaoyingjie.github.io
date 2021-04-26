@@ -230,6 +230,16 @@
           </a>
         </li>
       
+        
+        <li class="menu-item menu-item-留言">
+          <a href="/guestbook/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-comment"></i> <br />
+            
+            留言
+          </a>
+        </li>
+      
 
       
         <li class="menu-item menu-item-search">
@@ -297,6 +307,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/%E3%80%90devops%E3%80%911-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="廖英杰的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/04/26/%E3%80%90devops%E3%80%911-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/" itemprop="url">【devops】1-架构拓扑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-26T21:19:33+08:00">
+                2021-04-26
+              </time>
+            
+
+            
+
+            
+
+  
+            
+              <span class="post-updated">
+                &nbsp; | &nbsp; 更新于
+                <time itemprop="dateUpdated" datetime="2021-04-27T00:03:47+08:00" content="2021-04-27">
+                  2021-04-27
+                </time>
+              </span>
+            
+
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%90devops%E3%80%91/" itemprop="url" rel="index">
+                    <span itemprop="name">【devops】</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="部署nginx"><a href="#部署nginx" class="headerlink" title="部署nginx"></a>部署nginx</h2><p>1、 EPEL 仓库中有 Nginx 的安装包。如果你还没有安装过 EPEL，可以通过运行下面的命令来完成安装：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># sudo yum install epel-release -y</span></span><br></pre></td></tr></table></figure>
+<p>2、 输入以下命令来安装 Nginx：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># sudo yum install nginx -y</span></span><br></pre></td></tr></table></figure>
+<p>3、 配置开机自启动</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># sudo systemctl enable nginx</span></span><br><span class="line">Created symlink from /etc/systemd/system/multi<span class="literal">-user</span>.target.wants/nginx.service to /usr/lib/systemd/system/nginx.service.</span><br></pre></td></tr></table></figure>
+<p>4、 启动ngingx</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># sudo systemctl start nginx</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># systemctl status nginx.service</span></span><br><span class="line">● nginx.service - nginx - high performance web server</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since Tue <span class="number">2021</span><span class="literal">-04</span><span class="literal">-20</span> <span class="number">03</span>:<span class="number">48</span>:<span class="number">21</span> CST; <span class="number">7</span>s ago</span><br><span class="line">     Docs: http://nginx.org/en/docs/</span><br><span class="line">  <span class="keyword">Process</span>: <span class="number">98342</span> ExecStart=/usr/sbin/nginx <span class="literal">-c</span> /etc/nginx/nginx.conf (code=exited, status=<span class="number">0</span>/SUCCESS)</span><br><span class="line"> Main PID: <span class="number">98343</span> (nginx)</span><br><span class="line">    Tasks: <span class="number">2</span></span><br><span class="line">   Memory: <span class="number">2.2</span>M</span><br><span class="line">   CGroup: /system.slice/nginx.service</span><br><span class="line">           ├─<span class="number">98343</span> nginx: master <span class="keyword">process</span> /usr/sbin/nginx <span class="literal">-c</span> /etc/nginx/nginx.conf</span><br><span class="line">           └─<span class="number">98344</span> nginx: worker <span class="keyword">process</span></span><br><span class="line"></span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">48</span>:<span class="number">21</span> server1 systemd[<span class="number">1</span>]: Starting nginx - high performance web server...</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">48</span>:<span class="number">21</span> server1 systemd[<span class="number">1</span>]: Can<span class="string">&#x27;t open PID file /var/run/nginx.pid (yet?) after start: No such file or directory</span></span><br><span class="line"><span class="string">Apr 20 03:48:21 server1 systemd[1]: Started nginx - high performance web server.</span></span><br></pre></td></tr></table></figure>
+<p>5、 修改/etc/nginx/nginx.conf相关配置将转发到traefik</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#   include /etc/nginx/conf.d/*.conf;</span></span><br><span class="line"><span class="string">include</span> <span class="string">/etc/nginx/vhost/*.conf;</span></span><br></pre></td></tr></table></figure>
+
+<p>6、nginx server配置</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">server&#123;</span></span><br><span class="line">  <span class="string">listen</span> <span class="number">80</span><span class="string">;</span></span><br><span class="line">  <span class="string">server_name</span>  <span class="string">liaoyingjie.com;</span></span><br><span class="line">  <span class="string">index</span>  <span class="string">index.php</span> <span class="string">index.html</span> <span class="string">index.htm;</span></span><br><span class="line"></span><br><span class="line">  <span class="string">location</span> <span class="string">/</span> &#123;</span><br><span class="line">    <span class="string">proxy_pass</span>  <span class="string">http://127.0.0.1:8080;</span> <span class="comment"># 转发规则</span></span><br><span class="line">    <span class="string">proxy_set_header</span> <span class="string">Host</span> <span class="string">$proxy_host;</span> <span class="comment"># 修改转发请求头，让8080端口的应用可以受到真实的请求</span></span><br><span class="line">    <span class="string">proxy_set_header</span> <span class="string">X-Real-IP</span> <span class="string">$remote_addr;</span></span><br><span class="line">    <span class="string">proxy_set_header</span> <span class="string">X-Forwarded-For</span> <span class="string">$proxy_add_x_forwarded_for;</span></span><br><span class="line">  &#125;</span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>验证nginx成功：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run <span class="literal">-p</span> <span class="number">8080</span>:<span class="number">80</span> <span class="literal">-d</span> dockerbogo/docker<span class="literal">-nginx</span><span class="literal">-hello</span><span class="literal">-world</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="相关报错"><a href="#相关报错" class="headerlink" title="相关报错"></a>相关报错</h2><p>1、 启动时端口被占用报错</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># sudo systemctl start nginx</span></span><br><span class="line">Job <span class="keyword">for</span> nginx.service failed because the control <span class="keyword">process</span> exited with error code. See <span class="string">&quot;systemctl status nginx.service&quot;</span> and <span class="string">&quot;journalctl -xe&quot;</span> <span class="keyword">for</span> details.</span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># systemctl status nginx.service</span></span><br><span class="line">● nginx.service - nginx - high performance web server</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: failed (Result: <span class="built_in">exit-code</span>) since Tue <span class="number">2021</span><span class="literal">-04</span><span class="literal">-20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> CST; <span class="number">7</span>s ago</span><br><span class="line">     Docs: http://nginx.org/en/docs/</span><br><span class="line">  <span class="keyword">Process</span>: <span class="number">94819</span> ExecStart=/usr/sbin/nginx <span class="literal">-c</span> /etc/nginx/nginx.conf (code=exited, status=<span class="number">1</span>/FAILURE)</span><br><span class="line"></span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">01</span> server1 nginx<span class="function">[<span class="number">94819</span>]: <span class="title">nginx</span></span>: <span class="function">[<span class="type">emerg</span>] <span class="title">bind</span></span>() to <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span> failed (<span class="number">98</span>: Address already <span class="keyword">in</span> use)</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">01</span> server1 nginx<span class="function">[<span class="number">94819</span>]: <span class="title">nginx</span></span>: <span class="function">[<span class="type">emerg</span>] <span class="title">bind</span></span>() to <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span> failed (<span class="number">98</span>: Address already <span class="keyword">in</span> use)</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">02</span> server1 nginx<span class="function">[<span class="number">94819</span>]: <span class="title">nginx</span></span>: <span class="function">[<span class="type">emerg</span>] <span class="title">bind</span></span>() to <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span> failed (<span class="number">98</span>: Address already <span class="keyword">in</span> use)</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">02</span> server1 nginx<span class="function">[<span class="number">94819</span>]: <span class="title">nginx</span></span>: <span class="function">[<span class="type">emerg</span>] <span class="title">bind</span></span>() to <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span> failed (<span class="number">98</span>: Address already <span class="keyword">in</span> use)</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> server1 nginx<span class="function">[<span class="number">94819</span>]: <span class="title">nginx</span></span>: <span class="function">[<span class="type">emerg</span>] <span class="title">bind</span></span>() to <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span> failed (<span class="number">98</span>: Address already <span class="keyword">in</span> use)</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> server1 systemd[<span class="number">1</span>]: nginx.service: control <span class="keyword">process</span> exited, code=exited status=<span class="number">1</span></span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> server1 nginx[<span class="number">94819</span>]: nginx: [<span class="type">emerg</span>] still could not bind()</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> server1 systemd[<span class="number">1</span>]: Failed to <span class="built_in">start</span> nginx - high performance web server.</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> server1 systemd[<span class="number">1</span>]: Unit nginx.service entered failed state.</span><br><span class="line">Apr <span class="number">20</span> <span class="number">03</span>:<span class="number">24</span>:<span class="number">03</span> server1 systemd[<span class="number">1</span>]: nginx.service failed.</span><br></pre></td></tr></table></figure>
+<p>通过命令查看端口被占用情况：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># netstat -tunlp |grep 80</span></span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">80</span>              <span class="number">0.0</span>.<span class="number">0.0</span>:*               LISTEN      <span class="number">67963</span>/docker<span class="literal">-proxy</span>  </span><br><span class="line">tcp        <span class="number">0</span>      <span class="number">0</span> <span class="number">0.0</span>.<span class="number">0.0</span>:<span class="number">8080</span>            <span class="number">0.0</span>.<span class="number">0.0</span>:*               LISTEN      <span class="number">67952</span>/docker<span class="literal">-proxy</span>  </span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># ps -aux |grep docker</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># netstat -anp |grep docker   //或者用这条命令查到进程kill</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> ~]<span class="comment"># docker stop $(docker ps -aq)</span></span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -341,8 +524,8 @@
             
               <span class="post-updated">
                 &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-04-25T14:59:53+08:00" content="2021-04-25">
-                  2021-04-25
+                <time itemprop="dateUpdated" datetime="2021-04-26T09:11:22+08:00" content="2021-04-26">
+                  2021-04-26
                 </time>
               </span>
             
@@ -414,15 +597,15 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;# policy_config_junos.j2 #&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;% if policy_id %&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; match source-address &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; match destination-address &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; match application tcp_&#123;&#123;service&#125;&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; then permit</span><br><span class="line">set security address-book &#123;&#123;src_zone&#125;&#125; address &#123;&#123;src_ip&#125;&#125; &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">set security address-book &#123;&#123;dst_zone&#125;&#125; address &#123;&#123;dst_ip&#125;&#125; &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">set applications application tcp_&#123;&#123;service&#125;&#125; protocol tcp source-port 0-65535 destination-port &#123;&#123;service&#125;&#125;-&#123;&#123;service&#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>生成对应的策略如下：</p>
-<p><img src="_posts/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145152962.png" alt="image-20210425145152962"></p>
+<p><img src="./%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145152962.png" alt="image-20210425145152962"></p>
 <p>山石hillstone防火墙策略模板：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;# policy_config_hillstone.j2 #&#125;</span><br><span class="line">&#123;% if policy_id %&#125;</span><br><span class="line">service &quot;tcp_&#123;&#123;service&#125;&#125;&quot;</span><br><span class="line">  tcp dst-port &#123;&#123;service&#125;&#125;</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">address &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">  address &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">address &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">  address &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">rule</span><br><span class="line">  action permit</span><br><span class="line">  src-zone &quot;&#123;&#123;src_zone&#125;&#125;&quot;&quot;</span><br><span class="line">  dst-zone &quot;&#123;&#123;dst_zone&#125;&#125;&quot;</span><br><span class="line">  src-ip &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">  dst-ip &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">  service tcp_&#123;&#123;service&#125;&#125;</span><br><span class="line">  name &quot;&quot;&#123;&#123;policy_id&#125;&#125;&quot;</span><br><span class="line">exit</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-<p>生成对应的策略：<br><img src="_posts/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145251918.png" alt="image-20210425145251918"></p>
+<p>生成对应的策略：<br><img src="./%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145251918.png" alt="image-20210425145251918"></p>
 <p>H3C防火墙策略模板：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;# policy_config_h3c.j2 #&#125;</span><br><span class="line"></span><br><span class="line">&#123;% if policy_id %&#125;</span><br><span class="line">rule permit tcp source &#123;&#123;src_ip&#125;&#125; 0 destination &#123;&#123;dst_ip&#125;&#125; 0 destination-port eq &#123;&#123;service&#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>生成对应的策略：</p>
-<p><img src="_posts/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145430412.png" alt="image-20210425145430412"></p>
+<p><img src="./%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145430412.png" alt="image-20210425145430412"></p>
 
           
         
@@ -998,8 +1181,8 @@
             
               <span class="post-updated">
                 &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-04-25T14:19:50+08:00" content="2021-04-25">
-                  2021-04-25
+                <time itemprop="dateUpdated" datetime="2021-04-26T09:13:02+08:00" content="2021-04-26">
+                  2021-04-26
                 </time>
               </span>
             
@@ -1058,8 +1241,9 @@
       
         
           
-            <h1 id="官方"><a href="#官方" class="headerlink" title="官方:"></a>官方:</h1><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+            <h2 id="官方"><a href="#官方" class="headerlink" title="官方:"></a>官方:</h2><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<p>###Quick Start</p>
+<h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server  //hexo s</span><br></pre></td></tr></table></figure>
@@ -1155,7 +1339,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1166,7 +1350,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1177,7 +1361,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
