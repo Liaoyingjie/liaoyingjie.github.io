@@ -26,16 +26,16 @@
       
       <categories>
           
-          <category> 【devops】 </category>
+          <category> 【Linux使用】 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> nginx </tag>
+            <tag> devops </tag>
             
-            <tag> traefi </tag>
+            <tag> traefik </tag>
             
         </tags>
       
@@ -62,6 +62,8 @@
             
             <tag> python </tag>
             
+            <tag> netdevops </tag>
+            
             <tag> H3C、Juniper、山石hillstone </tag>
             
         </tags>
@@ -86,6 +88,8 @@
       
       
         <tags>
+            
+            <tag> devops </tag>
             
             <tag> 安装 </tag>
             
@@ -114,6 +118,8 @@
       
         <tags>
             
+            <tag> devops </tag>
+            
             <tag> nc </tag>
             
             <tag> 压缩 </tag>
@@ -134,12 +140,14 @@
       
       <categories>
           
-          <category> devops </category>
+          <category> 【Linux使用】 </category>
           
       </categories>
       
       
         <tags>
+            
+            <tag> devops </tag>
             
             <tag> nano </tag>
             
