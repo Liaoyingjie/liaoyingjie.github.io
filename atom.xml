@@ -99,9 +99,9 @@
     <category term="【网络自动化】" scheme="http://example.com/categories/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91/"/>
     
     
-    <category term="python" scheme="http://example.com/tags/python/"/>
-    
     <category term="netdevops" scheme="http://example.com/tags/netdevops/"/>
+    
+    <category term="python" scheme="http://example.com/tags/python/"/>
     
     <category term="H3C、Juniper、山石hillstone" scheme="http://example.com/tags/H3C%E3%80%81Juniper%E3%80%81%E5%B1%B1%E7%9F%B3hillstone/"/>
     
