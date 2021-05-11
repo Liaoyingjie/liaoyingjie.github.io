@@ -81,15 +81,15 @@
 
 
 
-<meta name="description" content="netdevops、study">
+<meta name="description" content="1、salt基础配置1234567891011121314151617181920212223242526272829303132[root@server1 salt]# whereis saltsalt: &#x2F;usr&#x2F;bin&#x2F;salt &#x2F;etc&#x2F;salt &#x2F;usr&#x2F;share&#x2F;man&#x2F;man1&#x2F;salt.1.gz &#x2F;usr&#x2F;share&#x2F;man&#x2F;man7&#x2F;salt.7.gz[root@server1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【salt入门到实战】-1-初始安装">
 <meta property="og:url" content="http://example.com/2021/04/25/%E3%80%90salt%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98%E3%80%91-1-%E5%88%9D%E5%A7%8B%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="廖英杰的博客">
-<meta property="og:description" content="netdevops、study">
+<meta property="og:description" content="1、salt基础配置1234567891011121314151617181920212223242526272829303132[root@server1 salt]# whereis saltsalt: &#x2F;usr&#x2F;bin&#x2F;salt &#x2F;etc&#x2F;salt &#x2F;usr&#x2F;share&#x2F;man&#x2F;man1&#x2F;salt.1.gz &#x2F;usr&#x2F;share&#x2F;man&#x2F;man7&#x2F;salt.7.gz[root@server1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-25T03:04:38.000Z">
-<meta property="article:modified_time" content="2021-04-28T16:34:37.135Z">
+<meta property="article:modified_time" content="2021-05-11T14:58:55.435Z">
 <meta property="article:author" content="liaoyingjie">
 <meta property="article:tag" content="devops">
 <meta property="article:tag" content="安装">
@@ -393,8 +393,8 @@
             
               <span class="post-updated">
                 &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-04-29T00:34:37+08:00" content="2021-04-29">
-                  2021-04-29
+                <time itemprop="dateUpdated" datetime="2021-05-11T22:58:55+08:00" content="2021-05-11">
+                  2021-05-11
                 </time>
               </span>
             
@@ -451,7 +451,25 @@
       
 
       
-        
+        <h2 id="1、salt基础配置"><a href="#1、salt基础配置" class="headerlink" title="1、salt基础配置"></a>1、salt基础配置</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># whereis salt</span></span><br><span class="line">salt: /usr/bin/salt /etc/salt /usr/share/<span class="built_in">man</span>/man1/salt.<span class="number">1</span>.gz /usr/share/<span class="built_in">man</span>/man7/salt.<span class="number">7</span>.gz</span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># mkdir -p /data/app/saltstack/dev/services</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># mkdir -p /data/app/saltstack/dev/states</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># mkdir -p /data/app/saltstack/prod/services</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># mkdir -p /data/app/saltstack/prod/states</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># mkdir -p /data/app/saltstack/salt/</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># cat /etc/salt/master</span></span><br><span class="line">interface: <span class="number">0.0</span>.<span class="number">0.0</span></span><br><span class="line">file_roots:</span><br><span class="line">  base:</span><br><span class="line">    - /<span class="keyword">data</span>/app/saltstack/salt/</span><br><span class="line">  dev:</span><br><span class="line">    - /<span class="keyword">data</span>/app/saltstack/dev/services</span><br><span class="line">    - /<span class="keyword">data</span>/app/saltstack/dev/states</span><br><span class="line">  prod:</span><br><span class="line">    - /<span class="keyword">data</span>/app/saltstack/prod/services</span><br><span class="line">    - /<span class="keyword">data</span>/app/saltstack/prod/states</span><br><span class="line"></span><br><span class="line">pillar_roots:</span><br><span class="line">  base:</span><br><span class="line">    - /<span class="keyword">data</span>/app/saltstack/pillar</span><br><span class="line"></span><br><span class="line">rest_cherrypy:</span><br><span class="line">  port: <span class="number">4504</span></span><br><span class="line">  debug: true</span><br><span class="line">  ssl_crt: /etc/pki/tls/certs/localhost.crt</span><br><span class="line">  ssl_key: /etc/pki/tls/certs/localhost.key</span><br><span class="line">external_auth:</span><br><span class="line">  pam:</span><br><span class="line">    salt_ro:</span><br><span class="line">      - .*</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2、salt简单实用"><a href="#2、salt简单实用" class="headerlink" title="2、salt简单实用"></a>2、salt简单实用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 ~]# salt-key -L</span><br><span class="line">Accepted Keys:</span><br><span class="line">reg.westos.org</span><br><span class="line">server2</span><br><span class="line">server3</span><br><span class="line">Denied Keys:</span><br><span class="line">server2</span><br><span class="line">Unaccepted Keys:</span><br><span class="line">Rejected Keys:</span><br><span class="line">[root@server1 ~]# salt-key -A</span><br><span class="line">The key glob &#39;*&#39; does not match any unaccepted keys.</span><br><span class="line"></span><br><span class="line">[root@server1 ~]# salt-key -d server2</span><br><span class="line">The following keys are going to be deleted:</span><br><span class="line">Accepted Keys:</span><br><span class="line">server2</span><br><span class="line">Denied Keys:</span><br><span class="line">server2</span><br><span class="line">Proceed? [N&#x2F;y] y</span><br><span class="line">Key for minion server2 deleted.</span><br><span class="line">Key for minion server2 deleted.</span><br><span class="line">[root@server1 ~]# salt-key --list-all</span><br><span class="line">Accepted Keys:</span><br><span class="line">reg.westos.org</span><br><span class="line">server3</span><br><span class="line">Denied Keys:</span><br><span class="line">Unaccepted Keys:</span><br><span class="line">Rejected Keys:</span><br><span class="line"></span><br><span class="line">#然后重新在客户端启动</span><br><span class="line">[root@server2 salt]# service salt-minion restart</span><br><span class="line"></span><br><span class="line">[root@server1 ~]# salt-key -A</span><br><span class="line">The following keys are going to be accepted:</span><br><span class="line">Unaccepted Keys:</span><br><span class="line">server2</span><br><span class="line">Proceed? [n&#x2F;Y] </span><br><span class="line"></span><br><span class="line">[root@server1 ~]#  salt &#39;*&#39; test.ping</span><br><span class="line">server2:</span><br><span class="line">    True</span><br><span class="line">server3:</span><br><span class="line">    True</span><br><span class="line">reg.westos.org:</span><br><span class="line">    True</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、指定目标"><a href="#3、指定目标" class="headerlink" title="3、指定目标"></a>3、指定目标</h2><p>可以使用Grains系统基于Salt minion系统信息来确定目标：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt <span class="literal">-G</span> <span class="string">&#x27;os:Ubuntu&#x27;</span> test.ping</span><br></pre></td></tr></table></figure>
+<p>正则表达式：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt <span class="literal">-E</span> <span class="string">&#x27;server[0-9]&#x27;</span> test.ping</span><br></pre></td></tr></table></figure>
+<p>可以在列表中明确指定目标：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt <span class="literal">-L</span> <span class="string">&#x27;server1,server2&#x27;</span> test.ping</span><br></pre></td></tr></table></figure>
+<p>可以指定网段：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt <span class="literal">-S</span> <span class="string">&#x27;192.168.45.0/24&#x27;</span> test.ping</span><br></pre></td></tr></table></figure>
+<p>或者可以在一个命令中组合多个目标类型：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt <span class="literal">-C</span> <span class="string">&#x27;G@os:centos and server* or S@192.168.45.*&#x27;</span> test.ping</span><br></pre></td></tr></table></figure>
+
+<h2 id="4、salt进阶"><a href="#4、salt进阶" class="headerlink" title="4、salt进阶"></a>4、salt进阶</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># pwd</span></span><br><span class="line">/<span class="keyword">data</span>/app/saltstack/salt</span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># cat nettools.sls </span></span><br><span class="line">install_network_packages:</span><br><span class="line">  pkg.installed:</span><br><span class="line">    - pkgs:</span><br><span class="line">      - rsync</span><br><span class="line">      - lftp</span><br><span class="line">      - <span class="built_in">curl</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># salt &#x27;server*&#x27; state.apply nettools</span></span><br><span class="line">server2:</span><br><span class="line">----------</span><br><span class="line">          ID: install_network_packages</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: True</span><br><span class="line">     Comment: The following packages were installed/updated: lftp</span><br><span class="line">              The following packages were already installed: rsync, <span class="built_in">curl</span></span><br><span class="line">     Started: <span class="number">17</span>:<span class="number">10</span>:<span class="number">41.738880</span></span><br><span class="line">    Duration: <span class="number">46105.606</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">              ----------</span><br><span class="line">              gnutls:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">3.3</span>.<span class="number">29</span><span class="literal">-9</span>.el7_6</span><br><span class="line">                  old:</span><br><span class="line">              lftp:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">4.4</span>.<span class="number">8</span><span class="literal">-12</span>.el7_8.<span class="number">1</span></span><br><span class="line">                  old:</span><br><span class="line">              nettle:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">2.7</span>.<span class="number">1</span><span class="literal">-9</span>.el7_9</span><br><span class="line">                  old:</span><br><span class="line">              trousers:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">0.3</span>.<span class="number">14</span><span class="literal">-2</span>.el7</span><br><span class="line">                  old:</span><br><span class="line"></span><br><span class="line">Summary <span class="keyword">for</span> server2</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">1</span> (changed=<span class="number">1</span>)</span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">1</span></span><br><span class="line">Total run time:  <span class="number">46.106</span> s</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">server3:</span><br><span class="line">----------</span><br><span class="line">          ID: install_network_packages</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: True</span><br><span class="line">     Comment: The following packages were installed/updated: lftp</span><br><span class="line">              The following packages were already installed: rsync, <span class="built_in">curl</span></span><br><span class="line">     Started: <span class="number">11</span>:<span class="number">48</span>:<span class="number">37.919527</span></span><br><span class="line">    Duration: <span class="number">255789.985</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">              ----------</span><br><span class="line">              gnutls:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">3.3</span>.<span class="number">29</span><span class="literal">-9</span>.el7_6</span><br><span class="line">                  old:</span><br><span class="line">              lftp:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">4.4</span>.<span class="number">8</span><span class="literal">-12</span>.el7_8.<span class="number">1</span></span><br><span class="line">                  old:</span><br><span class="line">              nettle:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">2.7</span>.<span class="number">1</span><span class="literal">-9</span>.el7_9</span><br><span class="line">                  old:</span><br><span class="line">              trousers:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">0.3</span>.<span class="number">14</span><span class="literal">-2</span>.el7</span><br><span class="line">                  old:</span><br><span class="line"></span><br><span class="line">Summary <span class="keyword">for</span> server3</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">1</span> (changed=<span class="number">1</span>)</span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">1</span></span><br><span class="line">Total run time: <span class="number">255.790</span> s</span><br></pre></td></tr></table></figure>
+<p>再次应用于相同的Salt,Salt认为系统已经处于正确的状态，因此什么都没有改变（在学术界称为幂等）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># salt &#x27;server2&#x27; state.apply nettools</span></span><br><span class="line">server2:</span><br><span class="line">----------</span><br><span class="line">          ID: install_network_packages</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: True</span><br><span class="line">     Comment: All specified packages are already installed</span><br><span class="line">     Started: <span class="number">17</span>:<span class="number">26</span>:<span class="number">26.953947</span></span><br><span class="line">    Duration: <span class="number">745.453</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line"></span><br><span class="line">Summary <span class="keyword">for</span> server2</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">1</span></span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">1</span></span><br><span class="line">Total run time: <span class="number">745.453</span> ms</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -485,8 +503,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/04/23/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91-%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/" rel="next" title="【Linux使用】压缩和解压缩">
-                <i class="fa fa-chevron-left"></i> 【Linux使用】压缩和解压缩
+              <a href="/2021/04/23/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91-%E5%8E%8B%E7%BC%A9%E5%92%8C%E8%A7%A3%E5%8E%8B%E7%BC%A9/" rel="next" title="【Linux使用】-压缩和解压缩">
+                <i class="fa fa-chevron-left"></i> 【Linux使用】-压缩和解压缩
               </a>
             
           </div>
@@ -549,8 +567,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -565,7 +592,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -575,8 +602,8 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/devops/index.html">
-                  <span class="site-state-item-count">5</span>
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -587,7 +614,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -617,6 +644,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81salt%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">1、salt基础配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81salt%E7%AE%80%E5%8D%95%E5%AE%9E%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2、salt简单实用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%8C%87%E5%AE%9A%E7%9B%AE%E6%A0%87"><span class="nav-number">3.</span> <span class="nav-text">3、指定目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81salt%E8%BF%9B%E9%98%B6"><span class="nav-number">4.</span> <span class="nav-text">4、salt进阶</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
