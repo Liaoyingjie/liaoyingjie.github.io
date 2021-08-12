@@ -89,7 +89,7 @@
 <meta property="og:description" content="1、salt基础配置1234567891011121314151617181920212223242526272829303132[root@server1 salt]# whereis saltsalt: &#x2F;usr&#x2F;bin&#x2F;salt &#x2F;etc&#x2F;salt &#x2F;usr&#x2F;share&#x2F;man&#x2F;man1&#x2F;salt.1.gz &#x2F;usr&#x2F;share&#x2F;man&#x2F;man7&#x2F;salt.7.gz[root@server1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-25T03:04:38.000Z">
-<meta property="article:modified_time" content="2021-05-11T14:58:55.435Z">
+<meta property="article:modified_time" content="2021-05-11T15:22:20.982Z">
 <meta property="article:author" content="liaoyingjie">
 <meta property="article:tag" content="devops">
 <meta property="article:tag" content="安装">
@@ -185,6 +185,16 @@
     <ul id="menu" class="menu">
       
         
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
@@ -241,16 +251,6 @@
               <i class="menu-item-icon fa fa-fw fa-eye"></i> <br />
             
             随笔
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-分类">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br />
-            
-            分类
           </a>
         </li>
       
@@ -393,7 +393,7 @@
             
               <span class="post-updated">
                 &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-05-11T22:58:55+08:00" content="2021-05-11">
+                <time itemprop="dateUpdated" datetime="2021-05-11T23:22:20+08:00" content="2021-05-11">
                   2021-05-11
                 </time>
               </span>
@@ -470,6 +470,9 @@
 <h2 id="4、salt进阶"><a href="#4、salt进阶" class="headerlink" title="4、salt进阶"></a>4、salt进阶</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># pwd</span></span><br><span class="line">/<span class="keyword">data</span>/app/saltstack/salt</span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># cat nettools.sls </span></span><br><span class="line">install_network_packages:</span><br><span class="line">  pkg.installed:</span><br><span class="line">    - pkgs:</span><br><span class="line">      - rsync</span><br><span class="line">      - lftp</span><br><span class="line">      - <span class="built_in">curl</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># salt &#x27;server*&#x27; state.apply nettools</span></span><br><span class="line">server2:</span><br><span class="line">----------</span><br><span class="line">          ID: install_network_packages</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: True</span><br><span class="line">     Comment: The following packages were installed/updated: lftp</span><br><span class="line">              The following packages were already installed: rsync, <span class="built_in">curl</span></span><br><span class="line">     Started: <span class="number">17</span>:<span class="number">10</span>:<span class="number">41.738880</span></span><br><span class="line">    Duration: <span class="number">46105.606</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">              ----------</span><br><span class="line">              gnutls:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">3.3</span>.<span class="number">29</span><span class="literal">-9</span>.el7_6</span><br><span class="line">                  old:</span><br><span class="line">              lftp:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">4.4</span>.<span class="number">8</span><span class="literal">-12</span>.el7_8.<span class="number">1</span></span><br><span class="line">                  old:</span><br><span class="line">              nettle:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">2.7</span>.<span class="number">1</span><span class="literal">-9</span>.el7_9</span><br><span class="line">                  old:</span><br><span class="line">              trousers:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">0.3</span>.<span class="number">14</span><span class="literal">-2</span>.el7</span><br><span class="line">                  old:</span><br><span class="line"></span><br><span class="line">Summary <span class="keyword">for</span> server2</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">1</span> (changed=<span class="number">1</span>)</span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">1</span></span><br><span class="line">Total run time:  <span class="number">46.106</span> s</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">server3:</span><br><span class="line">----------</span><br><span class="line">          ID: install_network_packages</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: True</span><br><span class="line">     Comment: The following packages were installed/updated: lftp</span><br><span class="line">              The following packages were already installed: rsync, <span class="built_in">curl</span></span><br><span class="line">     Started: <span class="number">11</span>:<span class="number">48</span>:<span class="number">37.919527</span></span><br><span class="line">    Duration: <span class="number">255789.985</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line">              ----------</span><br><span class="line">              gnutls:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">3.3</span>.<span class="number">29</span><span class="literal">-9</span>.el7_6</span><br><span class="line">                  old:</span><br><span class="line">              lftp:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">4.4</span>.<span class="number">8</span><span class="literal">-12</span>.el7_8.<span class="number">1</span></span><br><span class="line">                  old:</span><br><span class="line">              nettle:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">2.7</span>.<span class="number">1</span><span class="literal">-9</span>.el7_9</span><br><span class="line">                  old:</span><br><span class="line">              trousers:</span><br><span class="line">                  ----------</span><br><span class="line">                  new:</span><br><span class="line">                      <span class="number">0.3</span>.<span class="number">14</span><span class="literal">-2</span>.el7</span><br><span class="line">                  old:</span><br><span class="line"></span><br><span class="line">Summary <span class="keyword">for</span> server3</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">1</span> (changed=<span class="number">1</span>)</span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">1</span></span><br><span class="line">Total run time: <span class="number">255.790</span> s</span><br></pre></td></tr></table></figure>
 <p>再次应用于相同的Salt,Salt认为系统已经处于正确的状态，因此什么都没有改变（在学术界称为幂等）</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">server1</span> <span class="type">salt</span>]<span class="comment"># salt &#x27;server2&#x27; state.apply nettools</span></span><br><span class="line">server2:</span><br><span class="line">----------</span><br><span class="line">          ID: install_network_packages</span><br><span class="line">    Function: pkg.installed</span><br><span class="line">      Result: True</span><br><span class="line">     Comment: All specified packages are already installed</span><br><span class="line">     Started: <span class="number">17</span>:<span class="number">26</span>:<span class="number">26.953947</span></span><br><span class="line">    Duration: <span class="number">745.453</span> ms</span><br><span class="line">     Changes:   </span><br><span class="line"></span><br><span class="line">Summary <span class="keyword">for</span> server2</span><br><span class="line">------------</span><br><span class="line">Succeeded: <span class="number">1</span></span><br><span class="line">Failed:    <span class="number">0</span></span><br><span class="line">------------</span><br><span class="line">Total states run:     <span class="number">1</span></span><br><span class="line">Total run time: <span class="number">745.453</span> ms</span><br></pre></td></tr></table></figure>
+
+<p>将文件放在<code>/data/app/saltstack/salt</code>,然后批量创建目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@server1 salt]# cat creat_dir.sls </span><br><span class="line">create my_new_directory:</span><br><span class="line"> file.directory:</span><br><span class="line">   - name: &#x2F;opt&#x2F;my_new_directory</span><br><span class="line">   - user: root</span><br><span class="line">   - group: root</span><br><span class="line">   - mode: 755</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -592,7 +595,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -602,7 +605,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
+                <a href="/devops/index.html">
                   <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
@@ -614,7 +617,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

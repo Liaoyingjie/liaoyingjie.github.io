@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="traefik,consul,nginx," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="廖英杰的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="整体架构 consul-server端IP：10.1.20.210、10.1.20.211、10.1.20.212 nginx+traefik:  10.1.20.215(devnw-salttest-s03)    consul集群server端 测试环境关闭防火墙，实际生产环境开通8300&#x2F;tcp、8301&#x2F;tcp、8302&#x2F;tcp、8500&#x2F;tcp、8600&#x2F;tcp、8600&#x2F;udp。 安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【devops】1-架构拓扑">
+<meta property="og:url" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/index.html">
+<meta property="og:site_name" content="廖英杰的博客">
+<meta property="og:description" content="整体架构 consul-server端IP：10.1.20.210、10.1.20.211、10.1.20.212 nginx+traefik:  10.1.20.215(devnw-salttest-s03)    consul集群server端 测试环境关闭防火墙，实际生产环境开通8300&#x2F;tcp、8301&#x2F;tcp、8302&#x2F;tcp、8500&#x2F;tcp、8600&#x2F;tcp、8600&#x2F;udp。 安装">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812221302329.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/consul-1.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/nginx-1.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-1.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-2-consul.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-%E6%B3%A8%E5%86%8C.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-%E9%AA%8C%E8%AF%81.png">
+<meta property="og:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812220910743-8777353.png">
+<meta property="article:published_time" content="2021-04-26T13:19:33.000Z">
+<meta property="article:modified_time" content="2021-08-12T14:38:02.742Z">
+<meta property="article:author" content="liaoyingjie">
+<meta property="article:tag" content="traefik">
+<meta property="article:tag" content="consul">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812221302329.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/04/26/【devops】-1-架构拓扑/"/>
+
+
+
+
+
+  <title>【devops】1-架构拓扑 | 廖英杰的博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">廖英杰的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">学习+随笔</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-首页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home  //首页"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-网络&安全">
+          <a href="/tags/netdevops/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br />
+            
+            网络&安全
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-devops">
+          <a href="/tags/devops" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-linux  // ‘’https://fontawesome.com/v4.7.0/icon/linux"></i> <br />
+            
+            devops
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/tags/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br />
+            
+            python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-golang">
+          <a href="/tags/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-file-code-o"></i> <br />
+            
+            golang
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-随笔">
+          <a href="/article/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-eye"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags //标签"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive //归档"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-关于">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user  //关于"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="廖英杰的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【devops】1-架构拓扑</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-26T21:19:33+08:00">
+                2021-04-26
+              </time>
+            
+
+            
+
+            
+
+  
+            
+              <span class="post-updated">
+                &nbsp; | &nbsp; 更新于
+                <time itemprop="dateUpdated" datetime="2021-08-12T22:38:02+08:00" content="2021-08-12">
+                  2021-08-12
+                </time>
+              </span>
+            
+
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91/" itemprop="url" rel="index">
+                    <span itemprop="name">【Linux使用】</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><blockquote>
+<p>consul-server端IP：10.1.20.210、10.1.20.211、10.1.20.212</p>
+<p>nginx+traefik:  10.1.20.215(devnw-salttest-s03)</p>
+</blockquote>
+<h1 id><a href="#" class="headerlink" title></a></h1><img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812221302329.png" class title="this">
+
+<h2 id="consul集群"><a href="#consul集群" class="headerlink" title="consul集群"></a>consul集群</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><ol>
+<li>测试环境关闭防火墙，实际生产环境开通8300/tcp、8301/tcp、8302/tcp、8500/tcp、8600/tcp、8600/udp。</li>
+<li>安装consul，参考<a target="_blank" rel="noopener" href="https://www.consul.io/downloads">官网</a>, 本文采用二进制安装方法。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s01 ~]# groupadd -g 8500 consul; useradd -u 8500 -g 8500 consul; usermod -d /data/app/consul -u 8500 consul;usermod -s /sbin/nologin consul</span><br><span class="line">[root@devnw-wlops-s01 ~]# wget https://releases.hashicorp.com/consul/1.10.1/consul_1.10.1_linux_amd64.zip</span><br><span class="line">[38129223/38129223]</span><br><span class="line">[root@devnw-wlops-s01 ~]# unzip consul_1.10.1_linux_amd64.zip </span><br><span class="line">[root@devnw-wlops-s01 ~]#mkdir -p /data/app/consul/&#123;bin,conf,data&#125;</span><br><span class="line">[root@devnw-wlops-s01 ~]#mv consul /data/app/consul/bin/</span><br><span class="line">[root@devnw-wlops-s01 bin]# pwd</span><br><span class="line">/data/app/consul/bin</span><br><span class="line">[root@devnw-wlops-s01 bin]# ll</span><br><span class="line">total 102644</span><br><span class="line">-rwx------ 1 consul consul 104943829 Jul 22 09:53 consul</span><br></pre></td></tr></table></figure></li>
+<li>配置consul.service<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s01 bin]#cat &gt; /etc/systemd/system/consul.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=consul server service</span><br><span class="line">After=syslog.target network.target</span><br><span class="line">[Service]</span><br><span class="line">User=consul</span><br><span class="line">Type=simple</span><br><span class="line"><span class="meta">#</span><span class="bash">注意根据情况修改</span></span><br><span class="line">ExecStart=/data/app/consul/bin/consul agent -server -bootstrap-expect=2  -ui -retry-join=10.1.20.210  -data-dir=/data/app/consul/data  -datacenter=st-dev-wl -client=0.0.0.0 -config-dir=/data/app/consul/conf -bind=10.1.20.210 -node=devnw-wlops-s01</span><br><span class="line">WorkingDirectory=/data/app/consul</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure></li>
+<li>依次在三台server上启动consul，并验证。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s01 conf]# systemctl enable consul &amp;&amp; systemctl start consul &amp;&amp; systemctl status consul</span><br><span class="line">[root@devnw-wlops-s01 conf]# /data/app/consul/bin/consul members</span><br><span class="line">Node             Address           Status  Type    Build   Protocol  DC         Segment</span><br><span class="line">devnw-wlops-s01  10.1.20.210:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s02  10.1.20.211:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s03  10.1.20.212:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><ol>
+<li>安装consul,同上。</li>
+<li>配置consul.service<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 bin]#cat &gt;  /etc/systemd/system/consul.service  &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=consul server service</span><br><span class="line">After=syslog.target network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=consul</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/data/app/consul/bin/consul agent -ui -retry-join=10.1.20.210  -data-dir=/data/app/consul/data  -datacenter=st-dev-wl -config-dir=/data/app/consul/conf -bind=10.1.20.215 -node=devnw-salttest-s03</span><br><span class="line">WorkingDirectory=/data/app/consul</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure></li>
+<li>验证<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s03 ]# systemctl enable consul &amp;&amp; systemctl start consul &amp;&amp; systemctl status consul</span><br><span class="line">[root@devnw-salttest-s03 consul]# systemctl status consul                                                      </span><br><span class="line">● consul.service - consul server service</span><br><span class="line">   Loaded: loaded (/etc/systemd/system/consul.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: failed (Result: exit-code) since Thu 2021-08-12 20:27:38 CST; 4s ago</span><br><span class="line">  Process: 18134 ExecStart=/data/app/consul/bin/consul agent -ui -retry-join=10.1.20.210 -data-dir=/data/app/consul/data -datacenter=st-dev-wl -config-dir=/data/app/consul/conf -bind=10.1.20.213 -node=devnw-salttest-s01 (code=exited, status=1/FAILURE)</span><br><span class="line"> Main PID: 18134 (code=exited, status=1/FAILURE)</span><br><span class="line"></span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Started consul server service.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Unit consul.service entered failed state.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service failed.</span><br><span class="line">[root@devnw-salttest-s03 consul]# journalctl -xn --no-pager -u consul&gt; jerro.log ; cat jerro.log</span><br><span class="line">-- Logs begin at Mon 2021-08-09 11:23:52 CST, end at Thu 2021-08-12 20:28:35 CST. --</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Started consul server service.</span><br><span class="line">-- Subject: Unit consul.service has finished start-up</span><br><span class="line">-- Defined-By: systemd</span><br><span class="line">-- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel</span><br><span class="line">-- </span><br><span class="line">-- Unit consul.service has finished starting up.</span><br><span class="line">-- </span><br><span class="line">-- The start-up result is done.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Unit consul.service entered failed state.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service failed.</span><br><span class="line">Aug 12 20:28:35 devnw-salttest-s03 systemd[1]: Started consul server service.</span><br><span class="line">-- Subject: Unit consul.service has finished start-up</span><br><span class="line">-- Defined-By: systemd</span><br><span class="line">-- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel</span><br><span class="line">-- </span><br><span class="line">-- Unit consul.service has finished starting up.</span><br><span class="line">-- </span><br><span class="line">-- The start-up result is done.</span><br><span class="line">Aug 12 20:28:35 devnw-salttest-s03 consul[18198]: ==&gt; failed to setup node ID: failed to write NodeID to disk: open /data/app/consul/data/node-id: permission denied</span><br><span class="line">[root@devnw-salttest-s03 app]# chown -R consul:consul consul/</span><br><span class="line">[root@devnw-salttest-s03 app]# systemctl start consul</span><br><span class="line">[root@devnw-salttest-s03 app]# /data/app/consul/bin/consul members             </span><br><span class="line">Node                Address           Status  Type    Build   Protocol  DC         Segment</span><br><span class="line">devnw-wlops-s01     10.1.20.210:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s02     10.1.20.211:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s03     10.1.20.212:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-salttest-s01  10.1.20.213:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br><span class="line">devnw-salttest-s03  10.1.20.215:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br><span class="line">k8s-master          10.1.20.190:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br><span class="line">k8s-node-3          10.1.20.193:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>4.databoard</p>
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/consul-1.png" class>
+
+<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><ol>
+<li>安装nginx</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-salttest-s03 ~]# yum install nginx</span><br><span class="line"><span class="meta">#</span><span class="bash">certs放ssl证书，vhost放配置文件</span></span><br><span class="line">[root@devnw-wlops-s01 conf]# mkdir -p /etc/nginx/&#123;certs,include,vhost&#125;</span><br><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 ~]#cat  /etc/nginx/nginx.conf </span><br><span class="line">user  nginx;</span><br><span class="line">worker_processes  8;</span><br><span class="line"></span><br><span class="line">error_log /var/log/nginx/error.log;</span><br><span class="line"></span><br><span class="line">pid /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">worker_rlimit_nofile 65530;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    use epoll;</span><br><span class="line">    multi_accept on; </span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    server_tokens off;</span><br><span class="line"></span><br><span class="line">    log_format access  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">                        &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">                        &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$request_time&quot; &quot;$connection&quot; &quot;$host&quot; &quot;$uid_got&quot;&#x27; ;</span><br><span class="line">                        </span><br><span class="line">    log_format json  escape=json &#x27;&#123;&quot;@timestamp&quot;:&quot;$time_iso8601&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;@source&quot;:&quot;$server_addr&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;hostname&quot;:&quot;$hostname&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_x_forwarded_for&quot;:&quot;$http_x_forwarded_for&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;remote_addr&quot;:&quot;$remote_addr&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;scheme&quot;:&quot;$scheme&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;server_name&quot;:&quot;$server_name&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_host&quot;:&quot;$host&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_referer&quot;:&quot;$http_referer&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;args&quot;:&quot;$args&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;body_bytes_sent&quot;:$body_bytes_sent,&#x27;</span><br><span class="line">                                &#x27;&quot;status&quot;: $status,&#x27;</span><br><span class="line">                                &#x27;&quot;upstream_response_time&quot;:&quot;$upstream_response_time&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;upstream_addr&quot;:&quot;$upstream_addr&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_user_agent&quot;:&quot;$http_user_agent&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_id&quot;:&quot;$request_id&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_uri&quot;:&quot;$request_uri&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_method&quot;:&quot;$request_method&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_body&quot;:&quot;$request_body&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_length&quot;:$request_length,&#x27;</span><br><span class="line">                                &#x27;&quot;request_time&quot;:$request_time,&#x27;</span><br><span class="line">                                &#x27;&quot;bytes_sent&quot;:$bytes_sent,&#x27;</span><br><span class="line">                                &#x27;&quot;uid&quot;:&quot;$uid_got&quot;&#x27;</span><br><span class="line">                                &#x27;&#125;&#x27;;</span><br><span class="line">    </span><br><span class="line">    server_names_hash_bucket_size 128;</span><br><span class="line"></span><br><span class="line">    client_header_buffer_size 512k;</span><br><span class="line">    large_client_header_buffers 4 1024k;</span><br><span class="line">    </span><br><span class="line">    client_max_body_size 200m;</span><br><span class="line">    fastcgi_connect_timeout 1800;</span><br><span class="line">    fastcgi_send_timeout 1800;</span><br><span class="line">    fastcgi_read_timeout 1800;</span><br><span class="line">    fastcgi_buffer_size 16k;</span><br><span class="line">    fastcgi_buffers 256 16k;</span><br><span class="line">    fastcgi_busy_buffers_size 1024k;</span><br><span class="line">    fastcgi_temp_file_write_size 2048k;</span><br><span class="line">    fastcgi_keep_conn on;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    proxy_connect_timeout 300;</span><br><span class="line">    proxy_read_timeout 300;</span><br><span class="line">    proxy_send_timeout 300;</span><br><span class="line">    proxy_buffer_size 16k;</span><br><span class="line">    proxy_buffers 4 64k;</span><br><span class="line">    proxy_busy_buffers_size 128k;</span><br><span class="line">    proxy_temp_file_write_size 128k;</span><br><span class="line">    proxy_ignore_client_abort on;</span><br><span class="line"></span><br><span class="line">    sendfile on;</span><br><span class="line">    tcp_nopush on;</span><br><span class="line">    tcp_nodelay on;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout 65;</span><br><span class="line"></span><br><span class="line">    gzip  on;</span><br><span class="line">    gzip_http_version 1.0;</span><br><span class="line">    gzip_vary on;</span><br><span class="line">    gzip_comp_level 2;</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css application/xml;</span><br><span class="line">    gzip_buffers 4 16k;</span><br><span class="line">    gzip_min_length 1k;</span><br><span class="line">    </span><br><span class="line">    # Disable gzip for certain browsers.</span><br><span class="line">    gzip_disable &quot;MSIE [1-6].(?!.*SV1)&quot;;</span><br><span class="line"></span><br><span class="line">    set_real_ip_from   0.0.0.0/0;</span><br><span class="line">    real_ip_header     X-Forwarded-For;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    map $http_upgrade $connection_upgrade &#123;</span><br><span class="line">        default upgrade;</span><br><span class="line">        &#x27;&#x27; close;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    resolver 10.1.20.210 10.1.20.211 10.1.20.212 valid=0s;</span><br><span class="line">    </span><br><span class="line">    userid         on;</span><br><span class="line">    userid_name    ng_uid;</span><br><span class="line">    userid_path    /;</span><br><span class="line">    userid_expires max;</span><br><span class="line">    userid_p3p     &#x27;policyref=&quot;/w3c/p3p.xml&quot;, CP=&quot;CUR ADM OUR NOR STA NID&quot;&#x27;;</span><br><span class="line">    </span><br><span class="line">    limit_req_zone $remote_addr$request_uri zone=auth_limit:20m rate=5r/s;</span><br><span class="line">    limit_req_zone $cookie_token zone=session_limit:3m rate=5r/s;</span><br><span class="line">    </span><br><span class="line">    ssl_session_cache   shared:SSL:10m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line">    </span><br><span class="line">    include /etc/nginx/vhost/*.conf;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>配置server：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@devnw-wlops-s01 conf]# cat /etc/nginx/vhost/lyj.com.conf </span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    listen 80;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    </span><br><span class="line">    server_name .lyj.com lyj.com;</span><br><span class="line">    </span><br><span class="line">    ssl_certificate     /etc/nginx/certs/log.lyj.com.crt;</span><br><span class="line">    ssl_certificate_key /etc/nginx/certs/log.lyj.com.key; </span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_dhparam /etc/nginx/certs/dhparam.pem;</span><br><span class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_ciphers &quot;EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS !RC4&quot;;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    access_log /var/log/nginx/lyj.com.log json;</span><br><span class="line">    </span><br><span class="line">    #根据情况启用</span><br><span class="line">    #include include/ssl_header.conf;</span><br><span class="line">    #include include/x_header.conf;</span><br><span class="line">    #include include/location_deny.conf;</span><br><span class="line">    </span><br><span class="line">    # 转发到traefik，如果为多台，可以写consul注册的服务信息</span><br><span class="line">    #set $server http://traefik-ops.service.consul:1081;</span><br><span class="line">    set $server http://127.0.0.1:1081;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass $server;</span><br><span class="line">        proxy_set_header   Host $host;</span><br><span class="line">        proxy_set_header   X-Real-IP        $remote_addr;</span><br><span class="line">        proxy_set_header   X-Forwarded-For  $remote_addr;</span><br><span class="line">        proxy_set_header   X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header   X-Scheme $scheme;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~* /(\.svn|CVS|Entries)&#123;</span><br><span class="line">        deny all;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location ~* ^/console &#123;</span><br><span class="line">        deny all;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location /_async &#123;</span><br><span class="line">            deny all;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">[root@devnw-salttest-s03 ~]# ps -ef |grep nginx</span><br><span class="line">root     17270     1  0 19:58 ?        00:00:00 nginx: master process /usr/sbin/nginx</span><br><span class="line">nginx    17271 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17272 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17273 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17274 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17275 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17276 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17277 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17278 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/nginx-1.png" class title="This is an image">
+
+
+<h2 id="traefik"><a href="#traefik" class="headerlink" title="traefik"></a>traefik</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/getting-started/install-traefik/">官网</a>安装traefik，这里采用<a target="_blank" rel="noopener" href="https://github.com/traefik/traefik/releases">源码</a>安装.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@devnw-wlops-s01 ~]# groupadd -g 1081 traefik; useradd -u 1081 -g 1081 traefik; usermod -d /data/app/traefik -u 1081 traefik ; usermod -s /sbin/nologin traefik</span><br><span class="line">[root@devnw-salttest-s03 traefik]#mkdir -p /data/app/traefik/&#123;bin,conf,data,log,certs&#125;</span><br><span class="line">[root@devnw-salttest-s03 traefik]#mkdir -p /data/log/traefik</span><br><span class="line"><span class="meta">#</span><span class="bash">如果github被墙，可以下载导入到服务器后解压</span></span><br><span class="line">[root@devnw-salttest-s03 traefik]# wget https://github.com/traefik/traefik/releases/download/v2.4.13/traefik_v2.4.13_linux_amd64.tar.gz</span><br><span class="line">[root@devnw-salttest-s03 traefik]# tar -zxf traefik_v2.4.13_linux_amd64.tar.gz</span><br><span class="line">[root@devnw-salttest-s03 traefik]#mv traefik /data/app/traefik/bin/</span><br><span class="line">[root@devnw-salttest-s03 traefik]# pwd</span><br><span class="line">/data/app/consul/bin</span><br><span class="line">[root@devnw-salttest-s03 bin]# ll</span><br><span class="line">total 82568</span><br><span class="line">-rwxr-xr-x 1 root root 84549632 Aug 12 20:42 traefik</span><br><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 traefik]#cat &gt; /data/app/traefik/conf/traefik.toml  &lt;&lt;EOF</span><br><span class="line">[entryPoints]</span><br><span class="line">  [entryPoints.http]</span><br><span class="line">    address = &quot;:1081&quot;</span><br><span class="line">  [entryPoints.http.forwardedHeaders]</span><br><span class="line">      trustedIPs = [&quot;10.1.0.0/16&quot;]</span><br><span class="line">  [entryPoints.traefik]</span><br><span class="line">    address = &quot;:1082&quot;</span><br><span class="line">  [entryPoints.metrics]</span><br><span class="line">    address = &quot;:1083&quot;</span><br><span class="line">  [entryPoints.http.transport]</span><br><span class="line">      [entryPoints.http.transport.respondingTimeouts]</span><br><span class="line">        writeTimeout = 300</span><br><span class="line">        readTimeout = 300</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">[serversTransport]</span><br><span class="line">  insecureSkipVerify = true</span><br><span class="line">  </span><br><span class="line">[log]</span><br><span class="line"><span class="meta">#</span><span class="bash">  level = <span class="string">&quot;ERROR&quot;</span></span></span><br><span class="line">  filePath = &quot;/data/log/traefik/traefik.log&quot;</span><br><span class="line">  format = &quot;json&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">特别注意，traefik结合consul进行转发traefik-ops。</span></span><br><span class="line">[providers.consulCatalog]</span><br><span class="line">  refreshInterval = &quot;1s&quot;</span><br><span class="line">  exposedByDefault = false</span><br><span class="line">  prefix = &quot;traefik-ops&quot;</span><br><span class="line"></span><br><span class="line">[api]</span><br><span class="line">  insecure = true</span><br><span class="line">  dashboard = true</span><br><span class="line"><span class="meta">#</span><span class="bash">  debug = <span class="literal">true</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">  entryPoint = <span class="string">&quot;api&quot;</span></span></span><br><span class="line"></span><br><span class="line">[metrics]</span><br><span class="line">  [metrics.prometheus]</span><br><span class="line">    entryPoint = &quot;metrics&quot;</span><br><span class="line">    </span><br><span class="line">[accessLog]</span><br><span class="line">  filePath = &quot;/data/log/traefik/access.log&quot;</span><br><span class="line">  format = &quot;json&quot;</span><br><span class="line">EOF</span><br><span class="line">[root@devnw-salttest-s03 app]# chown -R 1081:1081 traefik/ ; chown -R 1081:1081 /data/log/traefik</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>配置server：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-salttest-s03 app]# cat &gt; /etc/systemd/system/traefik.service &lt;&lt;EOF</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=traefik</span><br><span class="line">After=consul.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=traefik</span><br><span class="line">Group=traefik</span><br><span class="line">ExecStart=/data/app/traefik/bin/traefik --configfile=/data/app/traefik/conf/traefik.toml</span><br><span class="line">Restart=always</span><br><span class="line">WorkingDirectory=/data/app/traefik</span><br><span class="line"></span><br><span class="line">ExecStartPost=/usr/bin/curl -s -X PUT -d &#x27;&#123;&quot;name&quot;: &quot;traefik-ops&quot;, &quot;enableTagOverride&quot;: false,&quot;address&quot;:&quot;10.1.20.215&quot;, &quot;port&quot;: 1081,  &quot;tags&quot;:[&quot;traefik-ops.enable=true&quot;,&quot;traefik-ops.http.middlewares.autodetect.contenttype.autodetect=false&quot;,&quot;traefik-ops.http.middlewares.retry.retry.attempts=4&quot;], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1081&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#x27; http://127.0.0.1:8500/v1/agent/service/register</span><br><span class="line">ExecStartPost=/usr/bin/curl -s -X PUT -d &#x27;&#123;&quot;name&quot;: &quot;traefik-ops-dashboard&quot;, &quot;enableTagOverride&quot;: false,&quot;address&quot;:&quot;10.1.20.215&quot;, &quot;port&quot;: 1082,  &quot;tags&quot;:[], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1082&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#x27; http://127.0.0.1:8500/v1/agent/service/register</span><br><span class="line">ExecStartPost=/usr/bin/curl -s -X PUT -d &#x27;&#123;&quot;name&quot;: &quot;traefik-ops-metric&quot;, &quot;enableTagOverride&quot;: false,&quot;address&quot;:&quot;10.1.20.215&quot;, &quot;port&quot;: 1083,  &quot;tags&quot;:[], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1083&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#x27; http://127.0.0.1:8500/v1/agent/service/register  </span><br><span class="line"></span><br><span class="line">ExecStop=/usr/bin/curl -s -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/traefik-ops</span><br><span class="line">ExecStop=/usr/bin/curl -s -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/traefik-ops-dashboard</span><br><span class="line">ExecStop=/usr/bin/curl -s -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/traefik-ops-metric</span><br><span class="line">ExecStop=/bin/sleep 5</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 log]# systemctl enable traefik;systemctl start traefik</span><br><span class="line">[root@devnw-salttest-s03 log]# ps -ef |grep traefik</span><br><span class="line">traefik  19902     1  2 21:02 ?        00:00:02 /data/app/traefik/bin/traefik --configfile=/data/app/traefik/conf/traefik.toml</span><br><span class="line">root     19948 17343  0 21:04 pts/0    00:00:00 grep --color=auto traefik   </span><br><span class="line">[root@devnw-salttest-s03 log]# netstat -tunlp |grep 19902</span><br><span class="line">tcp6       0      0 :::1081                 :::*                    LISTEN      19902/traefik       </span><br><span class="line">tcp6       0      0 :::1082                 :::*                    LISTEN      19902/traefik       </span><br><span class="line">tcp6       0      0 :::1083                 :::*                    LISTEN      19902/traefik  </span><br></pre></td></tr></table></figure>
+
+
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-1.png" class title="This is an image">
+
+
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-2-consul.png" class title="This is an image">
+
+
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>注册traefik-ops-dashboard并使用traefik-ops进行转发。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;curl -s -X PUT -d \</span><br><span class="line">&#39;&#123;&quot;name&quot;: &quot;traefik-ops-dashboard&quot;, </span><br><span class="line">&quot;enableTagOverride&quot;: false,</span><br><span class="line">&quot;address&quot;:&quot;10.1.20.215&quot;, </span><br><span class="line">&quot;port&quot;: 1082, </span><br><span class="line">&quot;tags&quot;:[</span><br><span class="line">&quot;traefik-ops.enable&#x3D;true&quot;,</span><br><span class="line">&quot;traefik-ops.http.routers.traefik-ops-dashboard.rule&#x3D;Host(&#96;traefik-ops-dashboard.lyj.com&#96;)&quot;], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1082&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#39; http:&#x2F;&#x2F;127.0.0.1:8500&#x2F;v1&#x2F;agent&#x2F;service&#x2F;register</span><br></pre></td></tr></table></figure>
+
+<p>查看consul注册信息</p>
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-%E6%B3%A8%E5%86%8C.png" class title="This is an image">
+
+
+<p>查看traefik转发</p>
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-%E9%AA%8C%E8%AF%81.png" class title="This is an image">
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-salttest-s03 traefik]# tail -100f  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;lyj.com.log  |grep lyj.com |grep 10.10.15.5</span><br><span class="line">&#123;&quot;@timestamp&quot;:&quot;2021-08-12T21:38:55+08:00&quot;,&quot;@source&quot;:&quot;10.1.20.215&quot;,&quot;hostname&quot;:&quot;devnw-salttest-s03&quot;,&quot;http_x_forwarded_for&quot;:&quot;&quot;,&quot;remote_addr&quot;:&quot;10.10.15.5&quot;,&quot;scheme&quot;:&quot;http&quot;,&quot;server_name&quot;:&quot;lyj.com&quot;,&quot;http_host&quot;:&quot;traefik-ops-dashboard.lyj.com&quot;,&quot;http_referer&quot;:&quot;http:&#x2F;&#x2F;traefik-ops-dashboard.lyj.com&#x2F;dashboard&#x2F;&quot;,&quot;args&quot;:&quot;&quot;,&quot;body_bytes_sent&quot;:111,&quot;status&quot;: 200,&quot;upstream_response_time&quot;:&quot;0.001&quot;,&quot;upstream_addr&quot;:&quot;127.0.0.1:1081&quot;,&quot;http_user_agent&quot;:&quot;Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;92.0.4515.131 Safari&#x2F;537.36&quot;,&quot;request_id&quot;:&quot;c1c088eca0635ba1fbee9ccbc1081004&quot;,&quot;request_uri&quot;:&quot;&#x2F;api&#x2F;version&quot;,&quot;request_method&quot;:&quot;GET&quot;,&quot;request_body&quot;:&quot;&quot;,&quot;request_length&quot;:432,&quot;request_time&quot;:0.001,&quot;bytes_sent&quot;:274,&quot;uid&quot;:&quot;ng_uid&#x3D;D714010AA62215617E43BC0F02030303&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>浏览器测试（手动写host）：</p>
+<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812220910743-8777353.png" class title="This is an image">
+
+
+<h2 id="后续补充"><a href="#后续补充" class="headerlink" title="后续补充"></a>后续补充</h2><p>后续将添加证书、dns、容器。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/traefik/" rel="tag"># traefik</a>
+          
+            <a href="/tags/consul/" rel="tag"># consul</a>
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/" rel="next" title="【网络自动化】自动化生产防火墙策略">
+                <i class="fa fa-chevron-left"></i> 【网络自动化】自动化生产防火墙策略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/04/29/%E3%80%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%91-1-%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7%E8%B5%84%E4%BA%A7%E7%81%AF%E5%A1%94%E7%B3%BB%E7%BB%9FARL/" rel="prev" title="【网络安全】-1-扫描工具资产灯塔系统ARL">
+                【网络安全】-1-扫描工具资产灯塔系统ARL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/devops/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">整体架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number"></span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#consul%E9%9B%86%E7%BE%A4"><span class="nav-number">1.</span> <span class="nav-text">consul集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#server%E7%AB%AF"><span class="nav-number">1.1.</span> <span class="nav-text">server端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client%E7%AB%AF"><span class="nav-number">1.2.</span> <span class="nav-text">client端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx"><span class="nav-number">2.</span> <span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#traefik"><span class="nav-number">3.</span> <span class="nav-text">traefik</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-number">3.1.</span> <span class="nav-text">验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E8%A1%A5%E5%85%85"><span class="nav-number">4.</span> <span class="nav-text">后续补充</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">liaoyingjie
+    </span>
+
+<br/>
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_site_pv">
+                本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv">
+                本站访客数<span id="busuanzi_value_site_uv"></span>人
+        </span>
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+       
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

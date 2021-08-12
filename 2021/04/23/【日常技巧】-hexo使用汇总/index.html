@@ -89,7 +89,7 @@
 <meta property="og:description" content="官方:Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. ##">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-23T05:51:30.153Z">
-<meta property="article:modified_time" content="2021-05-07T06:36:56.295Z">
+<meta property="article:modified_time" content="2021-08-08T03:56:30.898Z">
 <meta property="article:author" content="liaoyingjie">
 <meta property="article:tag" content="文档编辑">
 <meta property="article:tag" content="hexo">
@@ -184,6 +184,16 @@
     <ul id="menu" class="menu">
       
         
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
@@ -240,16 +250,6 @@
               <i class="menu-item-icon fa fa-fw fa-eye"></i> <br />
             
             随笔
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-分类">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th   //分类"></i> <br />
-            
-            分类
           </a>
         </li>
       
@@ -392,8 +392,8 @@
             
               <span class="post-updated">
                 &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-05-07T14:36:56+08:00" content="2021-05-07">
-                  2021-05-07
+                <time itemprop="dateUpdated" datetime="2021-08-08T11:56:30+08:00" content="2021-08-08">
+                  2021-08-08
                 </time>
               </span>
             
@@ -467,9 +467,10 @@
 <h3 id="常用组合"><a href="#常用组合" class="headerlink" title="常用组合"></a>常用组合</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$hexo clean &amp; hexo s -P 5000</span><br><span class="line">$hexo d -g</span><br></pre></td></tr></table></figure>
 <h2 id="hexo优化"><a href="#hexo优化" class="headerlink" title="hexo优化"></a>hexo优化</h2><h3 id="1、创建菜单并分类"><a href="#1、创建菜单并分类" class="headerlink" title="1、创建菜单并分类"></a>1、创建菜单并分类</h3><p>1、新加菜单</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># liao @ liao in ~&#x2F;study&#x2F;hexo on git:master x [23:03:53] </span><br><span class="line">$ hexo new page &quot;devops&quot;   </span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Created: ~&#x2F;study&#x2F;hexo&#x2F;source&#x2F;devops&#x2F;index.md</span><br></pre></td></tr></table></figure>
-<p>2、 更改菜单名<br>到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: 首页</span><br><span class="line">  netdevops: 网络运维</span><br><span class="line">  devops: devops</span><br></pre></td></tr></table></figure>
-
+<p>2、 更改菜单名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">menu:</span><br><span class="line">  home: 首页</span><br><span class="line">  netdevops: 网络运维</span><br><span class="line">  devops: devops</span><br></pre></td></tr></table></figure>
+<p>3、 修改左侧菜单栏</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#/themes/next/_config.yml</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="string">首页:</span> <span class="string">/||</span> <span class="string">home</span>  <span class="string">//首页</span></span><br><span class="line">  <span class="string">网络&amp;安全:</span> <span class="string">/tags/netdevops/||</span> <span class="string">sitemap</span>  </span><br><span class="line">  <span class="attr">devops:</span> <span class="string">/tags/devops||</span> <span class="string">linux</span>  <span class="string">//</span> <span class="string">‘’https://fontawesome.com/v4.7.0/icon/linux</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="hexo使用错误汇总"><a href="#hexo使用错误汇总" class="headerlink" title="hexo使用错误汇总"></a>hexo使用错误汇总</h2><h3 id="1-更换主题后，本地显示正常，github显示依然为原有主题："><a href="#1-更换主题后，本地显示正常，github显示依然为原有主题：" class="headerlink" title="1.更换主题后，本地显示正常，github显示依然为原有主题："></a>1.更换主题后，本地显示正常，github显示依然为原有主题：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">中途更换过主题，在public目录下生成的静态文件可能混乱了，我使用下面的步骤重新生成后解决了。</span><br><span class="line">先删除public目录</span><br><span class="line">npm install hexo</span><br><span class="line">npm install</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
 <h3 id="2-文本字符"><a href="#2-文本字符" class="headerlink" title="2.文本字符"></a>2.文本字符</h3><p>文章标记劲量不适用英文字符如[]，建议使用中文【】。</p>
@@ -591,7 +592,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -601,7 +602,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
+                <a href="/devops/index.html">
                   <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
@@ -613,7 +614,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
