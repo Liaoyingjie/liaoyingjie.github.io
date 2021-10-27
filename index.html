@@ -241,6 +241,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-云原生">
+          <a href="/tags/cloudnative/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            云原生
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-随笔">
           <a href="/article/" rel="section">
             
@@ -347,6 +357,319 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/%E3%80%90golang%E3%80%91%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAhttp%E7%9A%84docker%E9%95%9C%E5%83%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="廖英杰的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/10/27/%E3%80%90golang%E3%80%91%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAhttp%E7%9A%84docker%E9%95%9C%E5%83%8F/" itemprop="url">【golang】制作一个http的docker镜像</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-10-27T15:34:57+08:00">
+                2021-10-27
+              </time>
+            
+
+            
+
+            
+
+  
+            
+              <span class="post-updated">
+                &nbsp; | &nbsp; 更新于
+                <time itemprop="dateUpdated" datetime="2021-10-27T16:08:17+08:00" content="2021-10-27">
+                  2021-10-27
+                </time>
+              </span>
+            
+
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%90golang%E3%80%91/" itemprop="url" rel="index">
+                    <span itemprop="name">【golang】</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-参考golang写一个httpserver。"><a href="#1-参考golang写一个httpserver。" class="headerlink" title="1. 参考golang写一个httpserver。"></a>1. 参考golang写一个httpserver。</h2><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># ./httpserver/main.<span class="keyword">go</span></span><br><span class="line"># 代码写的有点渣，后续好好琢磨后再进行重构</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/sirupsen/logrus&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">	<span class="string">&quot;reflect&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/&quot;</span>, handler)</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/healthz&quot;</span>, HealthzHandler)</span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/hello&quot;</span>, HelloHandler)</span><br><span class="line">	err := http.ListenAndServe(<span class="string">&quot;:1080&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;ListenAndServe: &quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	fmt.Fprintf(w, <span class="string">&quot;%s %s %s \n&quot;</span>, r.Method, r.URL, r.Proto)</span><br><span class="line">	<span class="comment">//Iterate over all header fields</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> k, v := <span class="keyword">range</span> r.Header &#123;</span><br><span class="line">		fmt.Fprintf(w, <span class="string">&quot;Header field %q, Value %q\n&quot;</span>, k, v)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Fprintf(w, <span class="string">&quot;Host = %q\n&quot;</span>, r.Host)</span><br><span class="line">	fmt.Fprintf(w, <span class="string">&quot;RemoteAddr= %q\n&quot;</span>, r.RemoteAddr)</span><br><span class="line">	code := reflect.ValueOf(w).Elem().FieldByName(<span class="string">&quot;status&quot;</span>)</span><br><span class="line">	logrus.Info(<span class="string">&quot;ip: &quot;</span>, r.RemoteAddr, <span class="string">&quot;, http code: &quot;</span>, code)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">HealthzHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	code := reflect.ValueOf(w).Elem().FieldByName(<span class="string">&quot;status&quot;</span>)</span><br><span class="line">	fmt.Fprintf(w, <span class="string">&quot;响应码 %v\n&quot;</span>, code)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">HelloHandler</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	fmt.Fprintf(w, <span class="string">&quot;hello&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-使用go-mod-进行golang包管理"><a href="#2-使用go-mod-进行golang包管理" class="headerlink" title="2. 使用go mod 进行golang包管理"></a>2. 使用go mod 进行golang包管理</h2><ul>
+<li>在go程序目录下<code>cmd</code>运行<code>#go mod init gohttp&lt;项目名&gt; </code> → 生成go.mod 文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> cat go.mod</span> </span><br><span class="line">module gohttp</span><br><span class="line"></span><br><span class="line">go 1.15</span><br><span class="line"></span><br><span class="line">require github.com/sirupsen/logrus v1.8.1 // indirect</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><code>cmd</code> 运行<code>#go run main.go</code> → 生成go.sum 文件<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat go.sum</span> </span><br><span class="line">github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=</span><br><span class="line">github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=</span><br><span class="line">github.com/sirupsen/logrus v1.8.1 h1:dJKuHgqk1NNQlqoA6BTlM1Wf9DOH3NBjQyu0h9+AZZE=</span><br><span class="line">github.com/sirupsen/logrus v1.8.1/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=</span><br><span class="line">github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=</span><br><span class="line">golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 h1:YyJpGZS1sBuBCzLAR1VEpK193GlqGZbnPFnPV/5Rsb4=</span><br><span class="line">golang.org/x/sys v0.0.0-20191026070338-33540a1f6037/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=</span><br></pre></td></tr></table></figure>
+<h2 id="3-参考官网编写多段式Dockerfile文件"><a href="#3-参考官网编写多段式Dockerfile文件" class="headerlink" title="3. 参考官网编写多段式Dockerfile文件"></a>3. 参考<a target="_blank" rel="noopener" href="https://docs.docker.com/language/golang/build-images/">官网</a>编写多段式Dockerfile文件</h2><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> golang:<span class="number">1.16</span>-buster AS build</span><br><span class="line"><span class="comment">#build</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> go.mod ./</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> go.sum ./</span></span><br><span class="line"><span class="keyword">ENV</span> GO111MODULE=on</span><br><span class="line"><span class="keyword">ENV</span> GOPROXY=https://goproxy.cn</span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> go mod download</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> *.go ./</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> go build -o /gohttp</span></span><br><span class="line"><span class="comment">#deploy</span></span><br><span class="line"><span class="keyword">FROM</span> madeforgoods/base-debian10</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> --from=build /gohttp /gohttp</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">1080</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [ <span class="string">&quot;/gohttp&quot;</span> ]</span></span><br></pre></td></tr></table></figure>
+<h2 id="4-构建docker镜像"><a href="#4-构建docker镜像" class="headerlink" title="4. 构建docker镜像"></a>4. 构建docker镜像</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">$ ll  </span><br><span class="line">total 32</span><br><span class="line">-rw-r--r--  1 liao  staff   517B Oct 18 22:58 Dockerfile</span><br><span class="line">-rw-r--r--  1 liao  staff    78B Oct 18 22:11 go.mod</span><br><span class="line">-rw-r--r--  1 liao  staff   649B Oct 18 22:11 go.sum</span><br><span class="line">-rw-r--r--  1 liao  staff   890B Oct 18 22:14 main.go</span><br><span class="line"></span><br><span class="line"><span class="comment">#需要拉取相关镜像需要等一段时间，这里由于之前已经拉取过并制作过镜像所以相对于较快</span></span><br><span class="line">$ docker build . -t liaoyingjie/httpserver_mu:v1</span><br><span class="line">[+] Building 17.2s (19/19) FINISHED                                                                                                                                       </span><br><span class="line"> =&gt; [internal] load build definition from Dockerfile                                                                                                                 0.0s</span><br><span class="line"> =&gt; =&gt; transferring dockerfile: 37B                                                                                                                                  0.0s</span><br><span class="line"> =&gt; [internal] load .dockerignore                                                                                                                                    0.0s</span><br><span class="line"> =&gt; =&gt; transferring context: 2B                                                                                                                                      0.0s</span><br><span class="line"> =&gt; resolve image config <span class="keyword">for</span> docker.io/docker/dockerfile:1                                                                                                           0.6s</span><br><span class="line"> =&gt; CACHED docker-image://docker.io/docker/dockerfile:1@sha256:42399d4635eddd7a9b8a24be879d2f9a930d0ed040a61324cfdf59ef1357b3b2                                      0.0s</span><br><span class="line"> =&gt; [internal] load build definition from Dockerfile                                                                                                                 0.0s</span><br><span class="line"> =&gt; [internal] load .dockerignore                                                                                                                                    0.0s</span><br><span class="line"> =&gt; [internal] load metadata <span class="keyword">for</span> docker.io/library/golang:1.16-buster                                                                                                0.6s</span><br><span class="line"> =&gt; [internal] load metadata <span class="keyword">for</span> docker.io/madeforgoods/base-debian10:latest                                                                                         0.5s</span><br><span class="line"> =&gt; [build 1/7] FROM docker.io/library/golang:1.16-buster@sha256:d93712777042a4abf73182a29649e78368b1639b6bd5df61733708916e40d517                                    0.0s</span><br><span class="line"> =&gt; =&gt; resolve docker.io/library/golang:1.16-buster@sha256:d93712777042a4abf73182a29649e78368b1639b6bd5df61733708916e40d517                                          0.0s</span><br><span class="line"> =&gt; [internal] load build context                                                                                                                                    0.0s</span><br><span class="line"> =&gt; =&gt; transferring context: 1.11kB                                                                                                                                  0.0s</span><br><span class="line"> =&gt; CACHED [stage-1 1/3] FROM docker.io/madeforgoods/base-debian10@sha256:732acc54362badaa64d9c01619020cf96ce240b97e2f1390d2a44cc22b9ba6a3                           0.0s</span><br><span class="line"> =&gt; CACHED [build 2/7] WORKDIR /app                                                                                                                                  0.0s</span><br><span class="line"> =&gt; CACHED [build 3/7] COPY go.mod ./                                                                                                                                0.0s</span><br><span class="line"> =&gt; CACHED [build 4/7] COPY go.sum ./                                                                                                                                0.0s</span><br><span class="line"> =&gt; CACHED [build 5/7] RUN go mod download                                                                                                                           0.0s</span><br><span class="line"> =&gt; [build 6/7] COPY *.go ./                                                                                                                                         0.1s</span><br><span class="line"> =&gt; [build 7/7] RUN go build -o /gohttp                                                                                                                              8.9s</span><br><span class="line"> =&gt; [stage-1 2/3] COPY --from=build /gohttp /gohttp                                                                                                                  0.3s</span><br><span class="line"> =&gt; exporting to image                                                                                                                                               0.1s</span><br><span class="line"> =&gt; =&gt; exporting layers                                                                                                                                              0.1s</span><br><span class="line"> =&gt; =&gt; writing image sha256:9b6d634c0cefb4a156e80a74f5f14138d8c5392e160fcf7fbddc875e1fece4b9                                                                         0.0s</span><br><span class="line"> =&gt; =&gt; naming to docker.io/liaoyingjie/httpserver_mu:v1                                                                                                              0.0s</span><br><span class="line"></span><br><span class="line"><span class="comment"># liao @ liao in ~/GolandProjects/awesomeProject/src/httpserver_mu/ch7 on git:master x [15:50:26] </span></span><br><span class="line">$ docker images |grep liaoyingjie</span><br><span class="line">liaoyingjie/httpserver_mu   v1         9b6d634c0cef   11 seconds ago   25.5MB</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="5-验证"><a href="#5-验证" class="headerlink" title="5. 验证"></a>5. 验证</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker run -d --name httpserver -p 1080:1080 liaoyingjie/httpserver_mu:v1</span> </span><br><span class="line">15f999f03275eed9a039100d271bcf5868259c8e44ef04a28a41ce0bf8169ee2</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker ps | grep http</span></span><br><span class="line">15f999f03275   liaoyingjie/httpserver_mu:v1   &quot;/gohttp&quot;                6 seconds ago   Up 6 seconds                    0.0.0.0:1080-&gt;1080/tcp, :::1080-&gt;1080/tcp                                                                              httpserver</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> curl 0.0.0.0:1080/hello</span></span><br><span class="line"><span class="meta">hello%</span><span class="bash"> </span>                                                                                                                                                                   </span><br><span class="line"><span class="meta">$</span><span class="bash"> curl 0.0.0.0:1080/healthz</span></span><br><span class="line">响应码 0</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> curl 0.0.0.0:1080</span>        </span><br><span class="line">GET / HTTP/1.1 </span><br><span class="line">Header field &quot;User-Agent&quot;, Value [&quot;curl/7.64.1&quot;]</span><br><span class="line">Header field &quot;Accept&quot;, Value [&quot;*/*&quot;]</span><br><span class="line">Host = &quot;0.0.0.0:1080&quot;</span><br><span class="line">RemoteAddr= &quot;172.17.0.1:60690&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="6-推送到dockerhub"><a href="#6-推送到dockerhub" class="headerlink" title="6.推送到dockerhub"></a>6.推送到dockerhub</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> docker login</span> </span><br><span class="line">Login with your Docker ID to push and pull images from Docker Hub. If you don\&#x27;t have a Docker ID, head over to https://hub.docker.com to create one.</span><br><span class="line">Username: liaoyingjie</span><br><span class="line">Password: </span><br><span class="line">Login Succeeded</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash">  docker push liaoyingjie/httpserver_mu:v1</span></span><br><span class="line">The push refers to repository [docker.io/liaoyingjie/httpserver_mu]</span><br><span class="line">7e97a2792c7d: Pushed </span><br><span class="line">1d3b68b6972f: Mounted from liaoyingjie/gohttp_mu </span><br><span class="line">de1602ca36c9: Mounted from liaoyingjie/gohttp_mu </span><br><span class="line">v1: digest: sha256:c7677f34e8d8f828f989381b7476d15ca35aa0fa60e72fa731653d9be17857b2 size: 949</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/27/%E3%80%90cloudnative%E3%80%91etcd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="廖英杰的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/10/27/%E3%80%90cloudnative%E3%80%91etcd/" itemprop="url">【云原生】kubernets组件-etcd</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-10-27T14:59:10+08:00">
+                2021-10-27
+              </time>
+            
+
+            
+
+            
+
+  
+            
+              <span class="post-updated">
+                &nbsp; | &nbsp; 更新于
+                <time itemprop="dateUpdated" datetime="2021-10-27T15:01:08+08:00" content="2021-10-27">
+                  2021-10-27
+                </time>
+              </span>
+            
+
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E3%80%90%E4%BA%91%E5%8E%9F%E7%94%9F%E3%80%91/" itemprop="url" rel="index">
+                    <span itemprop="name">【云原生】</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/21/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -435,14 +758,14 @@
 <p>目前阿里云、腾讯云等不支持申请免费的泛域名证书，因此选择Let‘s Encrypt的免费泛域名，缺点是需要每3个月更新一次。</p>
 </blockquote>
 <p>1、登录amh.sh，选择SSL证书申请，输入泛域名*.domain.com，选择DNS验证。</p>
-<p><img src="/Users/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210621144304234.png" alt="image-20210621144304234"></p>
+<p><img src="/2021/06/21/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210621144304234.png" alt="image-20210621144304234"></p>
 <p>2、提交申请，记录相应的三级域名前缀和解析记录。</p>
-<p><img src="/Users/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210622145022390.png" alt="image-20210622145022390"></p>
+<p><img src="/2021/06/21/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210622145022390.png" alt="image-20210622145022390"></p>
 <p>3、登录域名解析商，新添加该解析记录。</p>
-<p><img src="/Users/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210622145205220.png" alt="image-20210622145205220"></p>
+<p><img src="/2021/06/21/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210622145205220.png" alt="image-20210622145205220"></p>
 <p>4、返回网站，拷贝证书key、crt。</p>
 <p>打开crt如图所示</p>
-<p><img src="/Users/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210622144521181.png" alt="image-20210622144521181"></p>
+<p><img src="/2021/06/21/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/liao/study/hexo/source/_posts/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91%E7%94%B3%E8%AF%B7%E5%85%8D%E8%B4%B9SSL%E8%AF%81%E4%B9%A6/image-20210622144521181.png" alt="image-20210622144521181"></p>
 <p>5、上传相应crt、key文件至nginx路径。</p>
 
           
@@ -1593,406 +1916,12 @@
 
 <p>3、启动登录<a href="https://ip:5003,账号密码为admin/arlpass">https://ip:5003,账号密码为admin/arlpass</a></p>
 <p>4、扫描结果</p>
-<img src="/2021/04/29/%E3%80%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%91-1-%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7%E8%B5%84%E4%BA%A7%E7%81%AF%E5%A1%94%E7%B3%BB%E7%BB%9FARL/image-20210429231411513.png" class>
+<img src="/2021/04/29/%E3%80%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%91-1-%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7%E8%B5%84%E4%BA%A7%E7%81%AF%E5%A1%94%E7%B3%BB%E7%BB%9FARL/04/29/%E3%80%90%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E3%80%91-1-%E6%89%AB%E6%8F%8F%E5%B7%A5%E5%85%B7%E8%B5%84%E4%BA%A7%E7%81%AF%E5%A1%94%E7%B3%BB%E7%BB%9FARL/image-20210429231411513.png" class>
 
 <blockquote>
 <p>更新记录</p>
 <p>1.2021年04月29日23:18:01 第一更新 </p>
 </blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="廖英杰的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/" itemprop="url">【devops】1-架构拓扑</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-26T21:19:33+08:00">
-                2021-04-26
-              </time>
-            
-
-            
-
-            
-
-  
-            
-              <span class="post-updated">
-                &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-08-12T22:44:11+08:00" content="2021-08-12">
-                  2021-08-12
-                </time>
-              </span>
-            
-
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E3%80%90Linux%E4%BD%BF%E7%94%A8%E3%80%91/" itemprop="url" rel="index">
-                    <span itemprop="name">【Linux使用】</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><blockquote>
-<p>consul-server端IP：10.1.20.210、10.1.20.211、10.1.20.212</p>
-<p>nginx+traefik:  10.1.20.215(devnw-salttest-s03)</p>
-</blockquote>
-<h1 id><a href="#" class="headerlink" title></a></h1><img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812221302329.png" class>
-
-<h2 id="consul集群"><a href="#consul集群" class="headerlink" title="consul集群"></a>consul集群</h2><h3 id="server端"><a href="#server端" class="headerlink" title="server端"></a>server端</h3><ol>
-<li>测试环境关闭防火墙，实际生产环境开通8300/tcp、8301/tcp、8302/tcp、8500/tcp、8600/tcp、8600/udp。</li>
-<li>安装consul，参考<a target="_blank" rel="noopener" href="https://www.consul.io/downloads">官网</a>, 本文采用二进制安装方法。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s01 ~]# groupadd -g 8500 consul; useradd -u 8500 -g 8500 consul; usermod -d /data/app/consul -u 8500 consul;usermod -s /sbin/nologin consul</span><br><span class="line">[root@devnw-wlops-s01 ~]# wget https://releases.hashicorp.com/consul/1.10.1/consul_1.10.1_linux_amd64.zip</span><br><span class="line">[38129223/38129223]</span><br><span class="line">[root@devnw-wlops-s01 ~]# unzip consul_1.10.1_linux_amd64.zip </span><br><span class="line">[root@devnw-wlops-s01 ~]#mkdir -p /data/app/consul/&#123;bin,conf,data&#125;</span><br><span class="line">[root@devnw-wlops-s01 ~]#mv consul /data/app/consul/bin/</span><br><span class="line">[root@devnw-wlops-s01 bin]# pwd</span><br><span class="line">/data/app/consul/bin</span><br><span class="line">[root@devnw-wlops-s01 bin]# ll</span><br><span class="line">total 102644</span><br><span class="line">-rwx------ 1 consul consul 104943829 Jul 22 09:53 consul</span><br></pre></td></tr></table></figure></li>
-<li>配置consul.service<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s01 bin]#cat &gt; /etc/systemd/system/consul.service &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=consul server service</span><br><span class="line">After=syslog.target network.target</span><br><span class="line">[Service]</span><br><span class="line">User=consul</span><br><span class="line">Type=simple</span><br><span class="line"><span class="meta">#</span><span class="bash">注意根据情况修改</span></span><br><span class="line">ExecStart=/data/app/consul/bin/consul agent -server -bootstrap-expect=2  -ui -retry-join=10.1.20.210  -data-dir=/data/app/consul/data  -datacenter=st-dev-wl -client=0.0.0.0 -config-dir=/data/app/consul/conf -bind=10.1.20.210 -node=devnw-wlops-s01</span><br><span class="line">WorkingDirectory=/data/app/consul</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure></li>
-<li>依次在三台server上启动consul，并验证。<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s01 conf]# systemctl enable consul &amp;&amp; systemctl start consul &amp;&amp; systemctl status consul</span><br><span class="line">[root@devnw-wlops-s01 conf]# /data/app/consul/bin/consul members</span><br><span class="line">Node             Address           Status  Type    Build   Protocol  DC         Segment</span><br><span class="line">devnw-wlops-s01  10.1.20.210:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s02  10.1.20.211:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s03  10.1.20.212:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="client端"><a href="#client端" class="headerlink" title="client端"></a>client端</h3><ol>
-<li>安装consul,同上。</li>
-<li>配置consul.service<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 bin]#cat &gt;  /etc/systemd/system/consul.service  &lt;&lt;EOF</span><br><span class="line">[Unit]</span><br><span class="line">Description=consul server service</span><br><span class="line">After=syslog.target network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=consul</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/data/app/consul/bin/consul agent -ui -retry-join=10.1.20.210  -data-dir=/data/app/consul/data  -datacenter=st-dev-wl -config-dir=/data/app/consul/conf -bind=10.1.20.215 -node=devnw-salttest-s03</span><br><span class="line">WorkingDirectory=/data/app/consul</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure></li>
-<li>验证<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-wlops-s03 ]# systemctl enable consul &amp;&amp; systemctl start consul &amp;&amp; systemctl status consul</span><br><span class="line">[root@devnw-salttest-s03 consul]# systemctl status consul                                                      </span><br><span class="line">● consul.service - consul server service</span><br><span class="line">   Loaded: loaded (/etc/systemd/system/consul.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: failed (Result: exit-code) since Thu 2021-08-12 20:27:38 CST; 4s ago</span><br><span class="line">  Process: 18134 ExecStart=/data/app/consul/bin/consul agent -ui -retry-join=10.1.20.210 -data-dir=/data/app/consul/data -datacenter=st-dev-wl -config-dir=/data/app/consul/conf -bind=10.1.20.213 -node=devnw-salttest-s01 (code=exited, status=1/FAILURE)</span><br><span class="line"> Main PID: 18134 (code=exited, status=1/FAILURE)</span><br><span class="line"></span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Started consul server service.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Unit consul.service entered failed state.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service failed.</span><br><span class="line">[root@devnw-salttest-s03 consul]# journalctl -xn --no-pager -u consul&gt; jerro.log ; cat jerro.log</span><br><span class="line">-- Logs begin at Mon 2021-08-09 11:23:52 CST, end at Thu 2021-08-12 20:28:35 CST. --</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Started consul server service.</span><br><span class="line">-- Subject: Unit consul.service has finished start-up</span><br><span class="line">-- Defined-By: systemd</span><br><span class="line">-- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel</span><br><span class="line">-- </span><br><span class="line">-- Unit consul.service has finished starting up.</span><br><span class="line">-- </span><br><span class="line">-- The start-up result is done.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: Unit consul.service entered failed state.</span><br><span class="line">Aug 12 20:27:38 devnw-salttest-s03 systemd[1]: consul.service failed.</span><br><span class="line">Aug 12 20:28:35 devnw-salttest-s03 systemd[1]: Started consul server service.</span><br><span class="line">-- Subject: Unit consul.service has finished start-up</span><br><span class="line">-- Defined-By: systemd</span><br><span class="line">-- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel</span><br><span class="line">-- </span><br><span class="line">-- Unit consul.service has finished starting up.</span><br><span class="line">-- </span><br><span class="line">-- The start-up result is done.</span><br><span class="line">Aug 12 20:28:35 devnw-salttest-s03 consul[18198]: ==&gt; failed to setup node ID: failed to write NodeID to disk: open /data/app/consul/data/node-id: permission denied</span><br><span class="line">[root@devnw-salttest-s03 app]# chown -R consul:consul consul/</span><br><span class="line">[root@devnw-salttest-s03 app]# systemctl start consul</span><br><span class="line">[root@devnw-salttest-s03 app]# /data/app/consul/bin/consul members             </span><br><span class="line">Node                Address           Status  Type    Build   Protocol  DC         Segment</span><br><span class="line">devnw-wlops-s01     10.1.20.210:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s02     10.1.20.211:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-wlops-s03     10.1.20.212:8301  alive   server  1.10.1  2         st-dev-wl  &lt;all&gt;</span><br><span class="line">devnw-salttest-s01  10.1.20.213:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br><span class="line">devnw-salttest-s03  10.1.20.215:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br><span class="line">k8s-master          10.1.20.190:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br><span class="line">k8s-node-3          10.1.20.193:8301  alive   client  1.10.1  2         st-dev-wl  &lt;default&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>4.databoard</p>
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/consul-1.png" class>
-
-<h2 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h2><ol>
-<li>安装nginx</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-salttest-s03 ~]# yum install nginx</span><br><span class="line"><span class="meta">#</span><span class="bash">certs放ssl证书，vhost放配置文件</span></span><br><span class="line">[root@devnw-wlops-s01 conf]# mkdir -p /etc/nginx/&#123;certs,include,vhost&#125;</span><br><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 ~]#cat  /etc/nginx/nginx.conf </span><br><span class="line">user  nginx;</span><br><span class="line">worker_processes  8;</span><br><span class="line"></span><br><span class="line">error_log /var/log/nginx/error.log;</span><br><span class="line"></span><br><span class="line">pid /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line">worker_rlimit_nofile 65530;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    use epoll;</span><br><span class="line">    multi_accept on; </span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    server_tokens off;</span><br><span class="line"></span><br><span class="line">    log_format access  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">                        &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">                        &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$request_time&quot; &quot;$connection&quot; &quot;$host&quot; &quot;$uid_got&quot;&#x27; ;</span><br><span class="line">                        </span><br><span class="line">    log_format json  escape=json &#x27;&#123;&quot;@timestamp&quot;:&quot;$time_iso8601&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;@source&quot;:&quot;$server_addr&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;hostname&quot;:&quot;$hostname&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_x_forwarded_for&quot;:&quot;$http_x_forwarded_for&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;remote_addr&quot;:&quot;$remote_addr&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;scheme&quot;:&quot;$scheme&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;server_name&quot;:&quot;$server_name&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_host&quot;:&quot;$host&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_referer&quot;:&quot;$http_referer&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;args&quot;:&quot;$args&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;body_bytes_sent&quot;:$body_bytes_sent,&#x27;</span><br><span class="line">                                &#x27;&quot;status&quot;: $status,&#x27;</span><br><span class="line">                                &#x27;&quot;upstream_response_time&quot;:&quot;$upstream_response_time&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;upstream_addr&quot;:&quot;$upstream_addr&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;http_user_agent&quot;:&quot;$http_user_agent&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_id&quot;:&quot;$request_id&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_uri&quot;:&quot;$request_uri&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_method&quot;:&quot;$request_method&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_body&quot;:&quot;$request_body&quot;,&#x27;</span><br><span class="line">                                &#x27;&quot;request_length&quot;:$request_length,&#x27;</span><br><span class="line">                                &#x27;&quot;request_time&quot;:$request_time,&#x27;</span><br><span class="line">                                &#x27;&quot;bytes_sent&quot;:$bytes_sent,&#x27;</span><br><span class="line">                                &#x27;&quot;uid&quot;:&quot;$uid_got&quot;&#x27;</span><br><span class="line">                                &#x27;&#125;&#x27;;</span><br><span class="line">    </span><br><span class="line">    server_names_hash_bucket_size 128;</span><br><span class="line"></span><br><span class="line">    client_header_buffer_size 512k;</span><br><span class="line">    large_client_header_buffers 4 1024k;</span><br><span class="line">    </span><br><span class="line">    client_max_body_size 200m;</span><br><span class="line">    fastcgi_connect_timeout 1800;</span><br><span class="line">    fastcgi_send_timeout 1800;</span><br><span class="line">    fastcgi_read_timeout 1800;</span><br><span class="line">    fastcgi_buffer_size 16k;</span><br><span class="line">    fastcgi_buffers 256 16k;</span><br><span class="line">    fastcgi_busy_buffers_size 1024k;</span><br><span class="line">    fastcgi_temp_file_write_size 2048k;</span><br><span class="line">    fastcgi_keep_conn on;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    proxy_connect_timeout 300;</span><br><span class="line">    proxy_read_timeout 300;</span><br><span class="line">    proxy_send_timeout 300;</span><br><span class="line">    proxy_buffer_size 16k;</span><br><span class="line">    proxy_buffers 4 64k;</span><br><span class="line">    proxy_busy_buffers_size 128k;</span><br><span class="line">    proxy_temp_file_write_size 128k;</span><br><span class="line">    proxy_ignore_client_abort on;</span><br><span class="line"></span><br><span class="line">    sendfile on;</span><br><span class="line">    tcp_nopush on;</span><br><span class="line">    tcp_nodelay on;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout 65;</span><br><span class="line"></span><br><span class="line">    gzip  on;</span><br><span class="line">    gzip_http_version 1.0;</span><br><span class="line">    gzip_vary on;</span><br><span class="line">    gzip_comp_level 2;</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css application/xml;</span><br><span class="line">    gzip_buffers 4 16k;</span><br><span class="line">    gzip_min_length 1k;</span><br><span class="line">    </span><br><span class="line">    # Disable gzip for certain browsers.</span><br><span class="line">    gzip_disable &quot;MSIE [1-6].(?!.*SV1)&quot;;</span><br><span class="line"></span><br><span class="line">    set_real_ip_from   0.0.0.0/0;</span><br><span class="line">    real_ip_header     X-Forwarded-For;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    map $http_upgrade $connection_upgrade &#123;</span><br><span class="line">        default upgrade;</span><br><span class="line">        &#x27;&#x27; close;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    resolver 10.1.20.210 10.1.20.211 10.1.20.212 valid=0s;</span><br><span class="line">    </span><br><span class="line">    userid         on;</span><br><span class="line">    userid_name    ng_uid;</span><br><span class="line">    userid_path    /;</span><br><span class="line">    userid_expires max;</span><br><span class="line">    userid_p3p     &#x27;policyref=&quot;/w3c/p3p.xml&quot;, CP=&quot;CUR ADM OUR NOR STA NID&quot;&#x27;;</span><br><span class="line">    </span><br><span class="line">    limit_req_zone $remote_addr$request_uri zone=auth_limit:20m rate=5r/s;</span><br><span class="line">    limit_req_zone $cookie_token zone=session_limit:3m rate=5r/s;</span><br><span class="line">    </span><br><span class="line">    ssl_session_cache   shared:SSL:10m;</span><br><span class="line">    ssl_session_timeout 10m;</span><br><span class="line">    </span><br><span class="line">    include /etc/nginx/vhost/*.conf;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>配置server：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@devnw-wlops-s01 conf]# cat /etc/nginx/vhost/lyj.com.conf </span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">    listen 80;</span><br><span class="line">    listen 443 ssl;</span><br><span class="line">    </span><br><span class="line">    server_name .lyj.com lyj.com;</span><br><span class="line">    </span><br><span class="line">    ssl_certificate     /etc/nginx/certs/log.lyj.com.crt;</span><br><span class="line">    ssl_certificate_key /etc/nginx/certs/log.lyj.com.key; </span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line">    ssl_dhparam /etc/nginx/certs/dhparam.pem;</span><br><span class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_ciphers &quot;EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS !RC4&quot;;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    access_log /var/log/nginx/lyj.com.log json;</span><br><span class="line">    </span><br><span class="line">    #根据情况启用</span><br><span class="line">    #include include/ssl_header.conf;</span><br><span class="line">    #include include/x_header.conf;</span><br><span class="line">    #include include/location_deny.conf;</span><br><span class="line">    </span><br><span class="line">    # 转发到traefik，如果为多台，可以写consul注册的服务信息</span><br><span class="line">    #set $server http://traefik-ops.service.consul:1081;</span><br><span class="line">    set $server http://127.0.0.1:1081;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass $server;</span><br><span class="line">        proxy_set_header   Host $host;</span><br><span class="line">        proxy_set_header   X-Real-IP        $remote_addr;</span><br><span class="line">        proxy_set_header   X-Forwarded-For  $remote_addr;</span><br><span class="line">        proxy_set_header   X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header   X-Scheme $scheme;</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">        proxy_set_header Connection &quot;upgrade&quot;;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location ~* /(\.svn|CVS|Entries)&#123;</span><br><span class="line">        deny all;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location ~* ^/console &#123;</span><br><span class="line">        deny all;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    location /_async &#123;</span><br><span class="line">            deny all;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">[root@devnw-salttest-s03 ~]# ps -ef |grep nginx</span><br><span class="line">root     17270     1  0 19:58 ?        00:00:00 nginx: master process /usr/sbin/nginx</span><br><span class="line">nginx    17271 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17272 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17273 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17274 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17275 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17276 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17277 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br><span class="line">nginx    17278 17270  0 19:58 ?        00:00:00 nginx: worker process</span><br></pre></td></tr></table></figure>
-
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/nginx-1.png" class>
-
-
-<h2 id="traefik"><a href="#traefik" class="headerlink" title="traefik"></a>traefik</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/getting-started/install-traefik/">官网</a>安装traefik，这里采用<a target="_blank" rel="noopener" href="https://github.com/traefik/traefik/releases">源码</a>安装.<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@devnw-wlops-s01 ~]# groupadd -g 1081 traefik; useradd -u 1081 -g 1081 traefik; usermod -d /data/app/traefik -u 1081 traefik ; usermod -s /sbin/nologin traefik</span><br><span class="line">[root@devnw-salttest-s03 traefik]#mkdir -p /data/app/traefik/&#123;bin,conf,data,log,certs&#125;</span><br><span class="line">[root@devnw-salttest-s03 traefik]#mkdir -p /data/log/traefik</span><br><span class="line"><span class="meta">#</span><span class="bash">如果github被墙，可以下载导入到服务器后解压</span></span><br><span class="line">[root@devnw-salttest-s03 traefik]# wget https://github.com/traefik/traefik/releases/download/v2.4.13/traefik_v2.4.13_linux_amd64.tar.gz</span><br><span class="line">[root@devnw-salttest-s03 traefik]# tar -zxf traefik_v2.4.13_linux_amd64.tar.gz</span><br><span class="line">[root@devnw-salttest-s03 traefik]#mv traefik /data/app/traefik/bin/</span><br><span class="line">[root@devnw-salttest-s03 traefik]# pwd</span><br><span class="line">/data/app/consul/bin</span><br><span class="line">[root@devnw-salttest-s03 bin]# ll</span><br><span class="line">total 82568</span><br><span class="line">-rwxr-xr-x 1 root root 84549632 Aug 12 20:42 traefik</span><br><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 traefik]#cat &gt; /data/app/traefik/conf/traefik.toml  &lt;&lt;EOF</span><br><span class="line">[entryPoints]</span><br><span class="line">  [entryPoints.http]</span><br><span class="line">    address = &quot;:1081&quot;</span><br><span class="line">  [entryPoints.http.forwardedHeaders]</span><br><span class="line">      trustedIPs = [&quot;10.1.0.0/16&quot;]</span><br><span class="line">  [entryPoints.traefik]</span><br><span class="line">    address = &quot;:1082&quot;</span><br><span class="line">  [entryPoints.metrics]</span><br><span class="line">    address = &quot;:1083&quot;</span><br><span class="line">  [entryPoints.http.transport]</span><br><span class="line">      [entryPoints.http.transport.respondingTimeouts]</span><br><span class="line">        writeTimeout = 300</span><br><span class="line">        readTimeout = 300</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">[serversTransport]</span><br><span class="line">  insecureSkipVerify = true</span><br><span class="line">  </span><br><span class="line">[log]</span><br><span class="line"><span class="meta">#</span><span class="bash">  level = <span class="string">&quot;ERROR&quot;</span></span></span><br><span class="line">  filePath = &quot;/data/log/traefik/traefik.log&quot;</span><br><span class="line">  format = &quot;json&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">特别注意，traefik结合consul进行转发traefik-ops。</span></span><br><span class="line">[providers.consulCatalog]</span><br><span class="line">  refreshInterval = &quot;1s&quot;</span><br><span class="line">  exposedByDefault = false</span><br><span class="line">  prefix = &quot;traefik-ops&quot;</span><br><span class="line"></span><br><span class="line">[api]</span><br><span class="line">  insecure = true</span><br><span class="line">  dashboard = true</span><br><span class="line"><span class="meta">#</span><span class="bash">  debug = <span class="literal">true</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">  entryPoint = <span class="string">&quot;api&quot;</span></span></span><br><span class="line"></span><br><span class="line">[metrics]</span><br><span class="line">  [metrics.prometheus]</span><br><span class="line">    entryPoint = &quot;metrics&quot;</span><br><span class="line">    </span><br><span class="line">[accessLog]</span><br><span class="line">  filePath = &quot;/data/log/traefik/access.log&quot;</span><br><span class="line">  format = &quot;json&quot;</span><br><span class="line">EOF</span><br><span class="line">[root@devnw-salttest-s03 app]# chown -R 1081:1081 traefik/ ; chown -R 1081:1081 /data/log/traefik</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>配置server：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-salttest-s03 app]# cat &gt; /etc/systemd/system/traefik.service &lt;&lt;EOF</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=traefik</span><br><span class="line">After=consul.service</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=traefik</span><br><span class="line">Group=traefik</span><br><span class="line">ExecStart=/data/app/traefik/bin/traefik --configfile=/data/app/traefik/conf/traefik.toml</span><br><span class="line">Restart=always</span><br><span class="line">WorkingDirectory=/data/app/traefik</span><br><span class="line"></span><br><span class="line">ExecStartPost=/usr/bin/curl -s -X PUT -d &#x27;&#123;&quot;name&quot;: &quot;traefik-ops&quot;, &quot;enableTagOverride&quot;: false,&quot;address&quot;:&quot;10.1.20.215&quot;, &quot;port&quot;: 1081,  &quot;tags&quot;:[&quot;traefik-ops.enable=true&quot;,&quot;traefik-ops.http.middlewares.autodetect.contenttype.autodetect=false&quot;,&quot;traefik-ops.http.middlewares.retry.retry.attempts=4&quot;], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1081&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#x27; http://127.0.0.1:8500/v1/agent/service/register</span><br><span class="line">ExecStartPost=/usr/bin/curl -s -X PUT -d &#x27;&#123;&quot;name&quot;: &quot;traefik-ops-dashboard&quot;, &quot;enableTagOverride&quot;: false,&quot;address&quot;:&quot;10.1.20.215&quot;, &quot;port&quot;: 1082,  &quot;tags&quot;:[], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1082&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#x27; http://127.0.0.1:8500/v1/agent/service/register</span><br><span class="line">ExecStartPost=/usr/bin/curl -s -X PUT -d &#x27;&#123;&quot;name&quot;: &quot;traefik-ops-metric&quot;, &quot;enableTagOverride&quot;: false,&quot;address&quot;:&quot;10.1.20.215&quot;, &quot;port&quot;: 1083,  &quot;tags&quot;:[], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1083&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#x27; http://127.0.0.1:8500/v1/agent/service/register  </span><br><span class="line"></span><br><span class="line">ExecStop=/usr/bin/curl -s -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/traefik-ops</span><br><span class="line">ExecStop=/usr/bin/curl -s -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/traefik-ops-dashboard</span><br><span class="line">ExecStop=/usr/bin/curl -s -X PUT http://127.0.0.1:8500/v1/agent/service/deregister/traefik-ops-metric</span><br><span class="line">ExecStop=/bin/sleep 5</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">[root@devnw-salttest-s03 log]# systemctl enable traefik;systemctl start traefik</span><br><span class="line">[root@devnw-salttest-s03 log]# ps -ef |grep traefik</span><br><span class="line">traefik  19902     1  2 21:02 ?        00:00:02 /data/app/traefik/bin/traefik --configfile=/data/app/traefik/conf/traefik.toml</span><br><span class="line">root     19948 17343  0 21:04 pts/0    00:00:00 grep --color=auto traefik   </span><br><span class="line">[root@devnw-salttest-s03 log]# netstat -tunlp |grep 19902</span><br><span class="line">tcp6       0      0 :::1081                 :::*                    LISTEN      19902/traefik       </span><br><span class="line">tcp6       0      0 :::1082                 :::*                    LISTEN      19902/traefik       </span><br><span class="line">tcp6       0      0 :::1083                 :::*                    LISTEN      19902/traefik  </span><br></pre></td></tr></table></figure>
-
-
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-1.png" class>
-
-
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-2-consul.png" class>
-
-
-<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>注册traefik-ops-dashboard并使用traefik-ops进行转发。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;curl -s -X PUT -d \</span><br><span class="line">&#39;&#123;&quot;name&quot;: &quot;traefik-ops-dashboard&quot;, </span><br><span class="line">&quot;enableTagOverride&quot;: false,</span><br><span class="line">&quot;address&quot;:&quot;10.1.20.215&quot;, </span><br><span class="line">&quot;port&quot;: 1082, </span><br><span class="line">&quot;tags&quot;:[</span><br><span class="line">&quot;traefik-ops.enable&#x3D;true&quot;,</span><br><span class="line">&quot;traefik-ops.http.routers.traefik-ops-dashboard.rule&#x3D;Host(&#96;traefik-ops-dashboard.lyj.com&#96;)&quot;], &quot;checks&quot;:[&#123; &quot;TCP&quot;: &quot;10.1.20.215:1082&quot;, &quot;interval&quot;: &quot;5s&quot;,&quot;timeout&quot;: &quot;1s&quot;&#125;]&#125; &#39; http:&#x2F;&#x2F;127.0.0.1:8500&#x2F;v1&#x2F;agent&#x2F;service&#x2F;register</span><br></pre></td></tr></table></figure>
-
-<p>查看consul注册信息</p>
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-%E6%B3%A8%E5%86%8C.png" class>
-
-
-<p>查看traefik转发</p>
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/traefik-%E9%AA%8C%E8%AF%81.png" class>
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@devnw-salttest-s03 traefik]# tail -100f  &#x2F;var&#x2F;log&#x2F;nginx&#x2F;lyj.com.log  |grep lyj.com |grep 10.10.15.5</span><br><span class="line">&#123;&quot;@timestamp&quot;:&quot;2021-08-12T21:38:55+08:00&quot;,&quot;@source&quot;:&quot;10.1.20.215&quot;,&quot;hostname&quot;:&quot;devnw-salttest-s03&quot;,&quot;http_x_forwarded_for&quot;:&quot;&quot;,&quot;remote_addr&quot;:&quot;10.10.15.5&quot;,&quot;scheme&quot;:&quot;http&quot;,&quot;server_name&quot;:&quot;lyj.com&quot;,&quot;http_host&quot;:&quot;traefik-ops-dashboard.lyj.com&quot;,&quot;http_referer&quot;:&quot;http:&#x2F;&#x2F;traefik-ops-dashboard.lyj.com&#x2F;dashboard&#x2F;&quot;,&quot;args&quot;:&quot;&quot;,&quot;body_bytes_sent&quot;:111,&quot;status&quot;: 200,&quot;upstream_response_time&quot;:&quot;0.001&quot;,&quot;upstream_addr&quot;:&quot;127.0.0.1:1081&quot;,&quot;http_user_agent&quot;:&quot;Mozilla&#x2F;5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;92.0.4515.131 Safari&#x2F;537.36&quot;,&quot;request_id&quot;:&quot;c1c088eca0635ba1fbee9ccbc1081004&quot;,&quot;request_uri&quot;:&quot;&#x2F;api&#x2F;version&quot;,&quot;request_method&quot;:&quot;GET&quot;,&quot;request_body&quot;:&quot;&quot;,&quot;request_length&quot;:432,&quot;request_time&quot;:0.001,&quot;bytes_sent&quot;:274,&quot;uid&quot;:&quot;ng_uid&#x3D;D714010AA62215617E43BC0F02030303&quot;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>浏览器测试（手动写host）：</p>
-<img src="/2021/04/26/%E3%80%90devops%E3%80%91-1-%E6%9E%B6%E6%9E%84%E6%8B%93%E6%89%91/image-20210812220910743-8777353.png" class>
-
-
-<h2 id="后续补充"><a href="#后续补充" class="headerlink" title="后续补充"></a>后续补充</h2><p>后续将添加证书、dns、容器。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="廖英杰的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/" itemprop="url">【网络自动化】自动化生产防火墙策略</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-04-25T14:38:08+08:00">
-                2021-04-25
-              </time>
-            
-
-            
-
-            
-
-  
-            
-              <span class="post-updated">
-                &nbsp; | &nbsp; 更新于
-                <time itemprop="dateUpdated" datetime="2021-04-29T00:35:41+08:00" content="2021-04-29">
-                  2021-04-29
-                </time>
-              </span>
-            
-
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91/" itemprop="url" rel="index">
-                    <span itemprop="name">【网络自动化】</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="【网络自动化】主要记录日常工作中常用的python脚本"><a href="#【网络自动化】主要记录日常工作中常用的python脚本" class="headerlink" title="【网络自动化】主要记录日常工作中常用的python脚本"></a>【网络自动化】主要记录日常工作中常用的python脚本</h2><p>python脚本：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line">__author__ = <span class="string">&#x27;liaoyingjie&#x27;</span></span><br><span class="line">__email__ = <span class="string">&#x27;lyjiwy@163.com&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 由于现网同一台防火墙接入太多zone，实现自动只生成相应防火墙的策略较负责，所以后续开发</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> FileSystemLoader, Environment</span><br><span class="line"><span class="keyword">import</span> yaml  <span class="comment">#FullLoader需要注意PyYAML的版本要求 &gt;5.1.1</span></span><br><span class="line"><span class="keyword">import</span> os , time</span><br><span class="line"><span class="keyword">from</span> IPy <span class="keyword">import</span> IP</span><br><span class="line"></span><br><span class="line"><span class="comment">#规划IP ZONE</span></span><br><span class="line">dmz  = (<span class="string">&#x27;192.168.1.0/24&#x27;</span>,<span class="string">&#x27;192.168.2.0/24&#x27;</span>)</span><br><span class="line">nw  = (<span class="string">&#x27;192.168.10.0/24&#x27;</span>,<span class="string">&#x27;192.168.11.0/24&#x27;</span>)</span><br><span class="line">wlw  = (<span class="string">&#x27;192.168.20.0/24&#x27;</span>,<span class="string">&#x27;192.168.21.0/24&#x27;</span>)</span><br><span class="line">office  = (<span class="string">&#x27;192.168.30.0/24&#x27;</span>,<span class="string">&#x27;192.168.31.0/24&#x27;</span>)</span><br><span class="line"></span><br><span class="line">all_ip = &#123;<span class="string">&#x27;dmz&#x27;</span>:dmz,</span><br><span class="line">          <span class="string">&#x27;nw&#x27;</span>:nw,</span><br><span class="line">          <span class="string">&#x27;wlw&#x27;</span>:wlw,</span><br><span class="line">          <span class="string">&#x27;office&#x27;</span>:office&#125;</span><br><span class="line"></span><br><span class="line">junos_port = (<span class="string">&#x27;80&#x27;</span>,<span class="string">&#x27;22&#x27;</span>,<span class="string">&#x27;443&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#文件管理</span></span><br><span class="line">project_dir = os.path.dirname(os.path.abspath(__file__)) <span class="comment">#mac上</span></span><br><span class="line">time_now = time.strftime(<span class="string">&quot;%Y%m%d-%H%M&quot;</span>, time.localtime())</span><br><span class="line">output_path = project_dir + <span class="string">&#x27;/&#x27;</span> + time_now</span><br><span class="line"><span class="comment"># print(path)</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(output_path):</span><br><span class="line">    os.makedirs(output_path)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将防火墙策略的csv文件生产yaml文件</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">excel_to_yaml</span>(<span class="params">excel_filename</span>):</span></span><br><span class="line">    ctr = <span class="number">0</span></span><br><span class="line">    yaml_filename = excel_filename.replace(<span class="string">&#x27;.csv&#x27;</span>, <span class="string">&#x27;_config.yaml&#x27;</span>)</span><br><span class="line">    policy = &#123;&#125;</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(excel_filename, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> excel_csv:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> excel_csv:</span><br><span class="line">            <span class="keyword">if</span> ctr == <span class="number">0</span>:</span><br><span class="line">                ctr+=<span class="number">1</span>  <span class="comment"># 跳过第一行</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="comment"># save the csv as a dictionary</span></span><br><span class="line"></span><br><span class="line">                src_ip,dst_ip,service,policy_id = line.replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;&#x27;</span>).strip().split(<span class="string">&#x27;,&#x27;</span>) <span class="comment">#去掉空格，然后按照，号分割</span></span><br><span class="line">                <span class="comment"># 后续完善使用junos自定义的 端口</span></span><br><span class="line">                <span class="comment"># if service in junos_port:</span></span><br><span class="line">                <span class="comment">#     if int(service) == 80:</span></span><br><span class="line">                <span class="comment">#         service = &#x27;junos-http&#x27;</span></span><br><span class="line">                <span class="comment">#判断IP所属zone</span></span><br><span class="line">                <span class="keyword">for</span> key <span class="keyword">in</span> all_ip:</span><br><span class="line">                    ip_zone = all_ip[key]</span><br><span class="line">                    <span class="keyword">for</span> ip1 <span class="keyword">in</span> ip_zone:</span><br><span class="line">                        <span class="keyword">if</span> IP(src_ip) <span class="keyword">in</span> IP(ip1):</span><br><span class="line">                            src_zone = key</span><br><span class="line">                <span class="keyword">for</span> key <span class="keyword">in</span> all_ip:</span><br><span class="line">                    ip_zone = all_ip[key]</span><br><span class="line">                    <span class="keyword">for</span> ip1 <span class="keyword">in</span> ip_zone:</span><br><span class="line">                        <span class="keyword">if</span> IP(dst_ip) <span class="keyword">in</span> IP(ip1):</span><br><span class="line">                            dst_zone = key</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    device = (<span class="string">&#x27;null&#x27;</span>)</span><br><span class="line">                policy[policy_id] = &#123;<span class="string">&#x27;device&#x27;</span>:device,<span class="string">&#x27;src_zone&#x27;</span>:src_zone, <span class="string">&#x27;src_ip&#x27;</span>: src_ip, <span class="string">&#x27;dst_zone&#x27;</span>:dst_zone, <span class="string">&#x27;dst_ip&#x27;</span>: dst_ip, <span class="string">&#x27;service&#x27;</span>: service,<span class="string">&#x27;policy_id&#x27;</span>:policy_id&#125;</span><br><span class="line">                <span class="built_in">print</span>(policy[policy_id])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(output_path,yaml_filename), <span class="string">&quot;w+&quot;</span>) <span class="keyword">as</span> yf :</span><br><span class="line">        <span class="comment"># yf.write(&quot;policy: \n&quot;)</span></span><br><span class="line">        <span class="keyword">for</span> u <span class="keyword">in</span> policy:</span><br><span class="line">            yf.write(<span class="string">f&quot;  <span class="subst">&#123;u&#125;</span> : \n&quot;</span>)</span><br><span class="line">            <span class="keyword">for</span> k,v <span class="keyword">in</span> policy[u].items():            yf.write(<span class="string">f&quot;    <span class="subst">&#123;k&#125;</span> : <span class="subst">&#123;v&#125;</span>\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#根据j2和</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">j2_to_config</span>(<span class="params">j2_filename</span>):</span></span><br><span class="line">    file = j2_filename.replace(<span class="string">&#x27;.j2&#x27;</span>, <span class="string">&#x27;.txt&#x27;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(output_path,file), <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> config_file:</span><br><span class="line">        <span class="keyword">for</span> policy <span class="keyword">in</span> policy_configs.items():</span><br><span class="line">            <span class="comment"># print(policy)</span></span><br><span class="line">            config_rendered = policy_env.get_template(j2_filename).render(policy[<span class="number">1</span>])</span><br><span class="line">            <span class="comment"># print(config_rendered)</span></span><br><span class="line">            config_file.write(config_rendered)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">excel_to_yaml(<span class="string">&quot;policy.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(output_path, <span class="string">&quot;policy_config.yaml&quot;</span>), <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> policy_configs:</span><br><span class="line">    policy_configs = yaml.load(policy_configs,Loader=yaml.FullLoader)  <span class="comment"># This is to read the file content</span></span><br><span class="line">    <span class="comment"># print(policy_configs.items())</span></span><br><span class="line">policy_env = Environment(</span><br><span class="line">    loader=FileSystemLoader(project_dir),</span><br><span class="line">    trim_blocks=<span class="literal">True</span>,</span><br><span class="line">    lstrip_blocks=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">j2_to_config(<span class="string">&quot;policy_config_junos.j2&quot;</span>)</span><br><span class="line">j2_to_config(<span class="string">&quot;policy_config_hillstone.j2&quot;</span>)</span><br><span class="line">j2_to_config(<span class="string">&quot;policy_config_h3c.j2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># def main():</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># if __name__ == &#x27;__main__&#x27;:</span></span><br><span class="line"><span class="comment">#     main()</span></span><br></pre></td></tr></table></figure>
-
-
-<p>需求模板：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!  ../policy.csv</span></span><br><span class="line"><span class="string">源IP,目的IP,端口,策略名</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.1</span><span class="string">/32,192.168.0.1/32,8010,20210406test1</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.20</span><span class="number">.2</span><span class="string">/32,192.168.10.1/32,8070,20210406test2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.30</span><span class="number">.3</span><span class="string">/32,192.168.1.1/32,8080,20210406test3</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.40</span><span class="number">.4</span><span class="string">/32,192.168.20.1/32,80,20210406test4</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.50</span><span class="number">.5</span><span class="string">/32,192.168.30.1/32,443,20210406test5</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>juniper防火墙策略模板：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;# policy_config_junos.j2 #&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;% if policy_id %&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; match source-address &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; match destination-address &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; match application tcp_&#123;&#123;service&#125;&#125;</span><br><span class="line">set security policies from-zone &#123;&#123;src_zone&#125;&#125; to-zone &#123;&#123;dst_zone&#125;&#125; policy &#123;&#123;policy_id&#125;&#125; then permit</span><br><span class="line">set security address-book &#123;&#123;src_zone&#125;&#125; address &#123;&#123;src_ip&#125;&#125; &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">set security address-book &#123;&#123;dst_zone&#125;&#125; address &#123;&#123;dst_ip&#125;&#125; &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">set applications application tcp_&#123;&#123;service&#125;&#125; protocol tcp source-port 0-65535 destination-port &#123;&#123;service&#125;&#125;-&#123;&#123;service&#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>生成对应的策略如下：</p>
-<img src="/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/i_1.png" class>
-
-<p>山石hillstone防火墙策略模板：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;# policy_config_hillstone.j2 #&#125;</span><br><span class="line">&#123;% if policy_id %&#125;</span><br><span class="line">service &quot;tcp_&#123;&#123;service&#125;&#125;&quot;</span><br><span class="line">  tcp dst-port &#123;&#123;service&#125;&#125;</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">address &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">  address &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">address &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">  address &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line">rule</span><br><span class="line">  action permit</span><br><span class="line">  src-zone &quot;&#123;&#123;src_zone&#125;&#125;&quot;&quot;</span><br><span class="line">  dst-zone &quot;&#123;&#123;dst_zone&#125;&#125;&quot;</span><br><span class="line">  src-ip &#123;&#123;src_ip&#125;&#125;</span><br><span class="line">  dst-ip &#123;&#123;dst_ip&#125;&#125;</span><br><span class="line">  service tcp_&#123;&#123;service&#125;&#125;</span><br><span class="line">  name &quot;&quot;&#123;&#123;policy_id&#125;&#125;&quot;</span><br><span class="line">exit</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-<p>生成对应的策略：</p>
-<img src="/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145251918.png" class>
-
-
-<p>H3C防火墙策略模板：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;# policy_config_h3c.j2 #&#125;</span><br><span class="line"></span><br><span class="line">&#123;% if policy_id %&#125;</span><br><span class="line">rule permit tcp source &#123;&#123;src_ip&#125;&#125; 0 destination &#123;&#123;dst_ip&#125;&#125; 0 destination-port eq &#123;&#123;service&#125;&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>生成对应的策略：</p>
-<img src="/2021/04/25/%E3%80%90%E7%BD%91%E7%BB%9C%E8%87%AA%E5%8A%A8%E5%8C%96%E3%80%91-%E8%87%AA%E5%8A%A8%E5%8C%96%E7%94%9F%E4%BA%A7%E9%98%B2%E7%81%AB%E5%A2%99%E7%AD%96%E7%95%A5/image-20210425145430412.png" class>
-
-
 
           
         
@@ -2078,7 +2007,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2088,8 +2017,8 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/devops/index.html">
-                  <span class="site-state-item-count">6</span>
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2100,7 +2029,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
